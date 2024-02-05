@@ -86,6 +86,9 @@ public class InAppBrowserDownloads implements DownloadListener {
     protected void processDownload() {
         final String url = InAppBrowserDownloads.this.url;
         final String cookie = CookieManager.getInstance().getCookie(url);
+        System.out.println("____________________________________________________________________________________________________________________");
+        System.out.println(url);
+        System.out.println("____________________________________________________________________________________________________________________");
         String tempfilename = URLUtil.guessFileName(url, InAppBrowserDownloads.this.contentDisposition,
                 InAppBrowserDownloads.this.mimetype);
         if (tempfilename.contains("; filename")) {
