@@ -29,6 +29,7 @@ var MobilePush = {
 
         push.on('notification', function (data) {
             console.log("notification title: " + data.title);
+            console.log("notification data: " + data);
 //            alert(JSON.stringify(data));
             var url = data.additionalData.url;
             MobileApp.popup(data.title, data.message, url);
