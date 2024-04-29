@@ -9,7 +9,7 @@ var MobilePush = {
             "android": {
                 "senderID": MobilePush.CONFIG_SENDER_ID,
                 "icon": "icon",
-                "forceShow": false
+                "forceShow": true
             },
             "ios": {
                 "senderID": MobilePush.CONFIG_SENDER_ID,
