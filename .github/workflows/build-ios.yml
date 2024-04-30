@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 
 env:
   TEAM_ID: CQHX8VZ8F7
-  PROVISIONING_PROFILE: Custom Mobile App Store
+  PROVISIONING_PROFILE: Derek App Provision Profile
   IPA_FILE: Custom Mobile.ipa
 
 jobs:
