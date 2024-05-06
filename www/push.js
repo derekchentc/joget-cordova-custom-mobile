@@ -1,7 +1,7 @@
 var MobilePush = {
     
     CONFIG_SENDER_ID: "390264906082",
-    CONFIG_PUSH_SERVER_URL: "https://derektesting.dx8snapshot.joget.dev/jw/web/json/app/jms/plugin/org.joget.mobile.MobilePushPlugin/service",
+    CONFIG_PUSH_SERVER_URL: "https://pushnotf.dx8snapshot.joget.dev/jw/web/json/app/jms/plugin/org.joget.mobile.MobilePushPlugin/service",
     pushRegistrationId: "",
 
     init: function() {
