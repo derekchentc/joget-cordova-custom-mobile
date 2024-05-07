@@ -65,7 +65,7 @@ var MobilePush = {
                     var username = MobileApp.getUsername(profile);
                     console.log("profileUrl: " + domain);
                     console.log("username: " + username);
-
+                    alert(MobilePush.CONFIG_PUSH_SERVER_URL);
                     var pushUrl = MobilePush.CONFIG_PUSH_SERVER_URL + "?_a=register&deviceId=" + encodeURIComponent(deviceId) + "&deviceInfo=" + encodeURIComponent(deviceInfo) + "&registrationId=" + encodeURIComponent(registrationId) + "&username=" + encodeURIComponent(username) + "&domain=" + encodeURIComponent(domain);
                     $.support.cors = true;
                     $.ajax({
