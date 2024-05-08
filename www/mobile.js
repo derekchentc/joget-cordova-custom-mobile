@@ -493,10 +493,10 @@ var MobileApp = {
                                 } else { \
                                     console.log('User profile link not found, redirecting to:', '" + url + "'); \
                                     window.location.href = '" + url + "'; \
+                                    var data = {'action': 'show', 'message': 'true'}; \
+                                    var json = JSON.stringify(data); \
+                                    window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                                 } \
-                                var data = {'action': 'show', 'message': 'true'}; \
-                                var json = JSON.stringify(data); \
-                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
