@@ -484,7 +484,8 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                var responseHTML = this.responseXML; \
+                                var parser = new DOMParser(); \
+                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 if (profileLink) { \
                                     console.log('User profile link found:', profileLink.href); \
