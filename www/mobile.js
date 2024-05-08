@@ -474,7 +474,7 @@ var MobileApp = {
         var parser = document.createElement('a');
         parser.href = url;
         var hostUri = parser.protocol + "//" + parser.host;
-        console.log(hostUri + "/jw/web/login?login_error=1");
+        var loginPageUrl = hostUri + "/jw/web/login?login_error=1";
         if (loginUrl) {
             // perform login
             var callback = function() {
@@ -486,11 +486,10 @@ var MobileApp = {
                                 console.log('login done'); \
                                 var responseText = this.responseText; \
                                 if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) { \
-                                    console.log('The <form> tag exists in the response');\
+                                    window.location.href='" + loginPageUrl + "'; \
                                 } else { \
-                                    console.log('The <form> tag does not exist in the response'); \
+                                    window.location.href='" + url + "'; \
                                 } \
-                                window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
