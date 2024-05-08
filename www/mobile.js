@@ -485,6 +485,7 @@ var MobileApp = {
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
                                 var responseText = this.responseText; \
+                                console.log(responseText); \
                                 if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) { \
                                     console.log('login page1: " + loginPageUrl + "'); \
                                     window.location.href='" + loginPageUrl + "'; \
