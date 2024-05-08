@@ -490,6 +490,7 @@ var MobileApp = {
                                 if (profileLink) { \
                                     console.log('User profile link found:', profileLink.href); \
                                     window.location.href = profileLink.href; \
+                                    window.location.href = '" + loginPageUrl + "'; \
                                 } else { \
                                     console.log('User profile link not found, redirecting to:', '" + url + "'); \
                                     window.location.href = '" + url + "'; \
