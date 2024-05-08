@@ -494,7 +494,7 @@ var MobileApp = {
                                 } else { \
                                     console.log('User profile link not found, redirecting to: ' + redirectURL); \
                                 } \
-                                console.log(redirectURL) \
+                                console.log(redirectURL); \
                                 window.location.href = redirectURL; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
