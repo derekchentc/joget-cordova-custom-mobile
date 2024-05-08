@@ -474,12 +474,16 @@ var MobileApp = {
         if (loginUrl) {
             // perform login
             var callback = function() {
-                console.log(loginUrl);
+                console.log(url);
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
+                                console.log(this.status); \
+                                if (this.status == 200) { \
+                                    console.log('login valid'); \
+                                }\
                                 console.log('login done'); \
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
