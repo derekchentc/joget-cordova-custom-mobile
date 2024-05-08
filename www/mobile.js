@@ -488,8 +488,8 @@ var MobileApp = {
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 if (profileLink) { \
-                                    console.log('User profile link found:', '" + loginPageUrl + "'); \
-                                    window.location.href = '" + loginPageUrl + "'; \
+                                    console.log('User profile link found:', 'http://192.168.0.9:8080/jw/web/mobile?_cordova=true'); \
+                                    window.location.href = 'http://192.168.0.9:8080/jw/web/mobile?_cordova=true'; \
                                 } else { \
                                     console.log('User profile link not found, redirecting to:', '" + url + "'); \
                                     window.location.href = '" + url + "'; \
