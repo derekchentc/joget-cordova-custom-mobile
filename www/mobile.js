@@ -471,27 +471,25 @@ var MobileApp = {
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        var parser = document.createElement('a');
+        parser.href = url;
+        var hostUri = parser.protocol + "//" + parser.host;
+        console.log(hostUri + "/jw/web/login?login_error=1");
         if (loginUrl) {
             // perform login
             var callback = function() {
-                var parser = document.createElement('a');
-                parser.href = url;
-                var hostUri = parser.protocol + "//" + parser.host;
-                console.log(hostUri + "/jw/web/login?login_error=1");
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                var responseText = this.responseText;\
-                                if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) {\
-                                    // login unsuccessfull\
+                                var responseText = this.responseText; \
+                                if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) { \
                                     console.log('The <form> tag exists in the response');\
-                                } else {\
-                                    // The specified <form> tag does not exist in the response\
-                                    console.log('The <form> tag does not exist in the response');\
-                                }\
+                                } else { \
+                                    console.log('The <form> tag does not exist in the response'); \
+                                } \
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
