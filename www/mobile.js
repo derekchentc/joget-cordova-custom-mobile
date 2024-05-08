@@ -474,7 +474,7 @@ var MobileApp = {
         var parser = document.createElement('a');
         parser.href = url;
         var hostUri = parser.protocol + "//" + parser.host;
-        var loginPageUrl = hostUri + "/jw/web/login?login_error=1";
+        var loginPageUrl = hostUri + "/jw/web/mobile";
         if (loginUrl) {
             // perform login
             var callback = function() {
@@ -488,8 +488,7 @@ var MobileApp = {
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 if (profileLink) { \
-                                    console.log('User profile link found:', profileLink.href); \
-                                    window.location.href = profileLink.href; \
+                                    console.log('User profile link found:', '" + loginPageUrl + "'); \
                                     window.location.href = '" + loginPageUrl + "'; \
                                 } else { \
                                     console.log('User profile link not found, redirecting to:', '" + url + "'); \
