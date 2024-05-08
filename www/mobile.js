@@ -480,7 +480,7 @@ var MobileApp = {
                         var xhttp = new XMLHttpRequest(); \
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
-                                console.log(this); \
+                                console.log(this.responseText.trim()); \
                                 if (this.status == 200) { \
                                     console.log('login valid'); \
                                 }\
