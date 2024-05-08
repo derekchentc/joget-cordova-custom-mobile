@@ -486,10 +486,10 @@ var MobileApp = {
                                 console.log('login done'); \
                                 var responseText = this.responseText; \
                                 if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) { \
-                                    console.log('login page1:'" + loginPageUrl + "'); \
+                                    console.log('login page1: " + loginPageUrl + "'); \
                                     window.location.href='" + loginPageUrl + "'; \
                                 } else { \
-                                    console.log('login page2:'" + url + "'); \
+                                    console.log('login page2: " + url + "'); \
                                     window.location.href='" + url + "'; \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
