@@ -472,12 +472,12 @@ var MobileApp = {
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {
+            var parser = document.createElement('a');
+            parser.href = url;
+            var hostUri = parser.protocol + "//" + parser.host;
+            var loginPageUrl = hostUri + "/jw/web/mobile";
             // perform login
             var callback = function() {
-                var parser = document.createElement('a');
-                parser.href = url;
-                var hostUri = parser.protocol + "//" + parser.host;
-                var loginPageUrl = hostUri + "/jw/web/mobile";
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
@@ -487,16 +487,17 @@ var MobileApp = {
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                                var redirectURL = '" + url + "'; \
                                 if (profileLink) { \
-                                    console.log('User profile link found:', 'http://192.168.0.9:8080/jw/web/mobile?_cordova=true'); \
-                                    window.location.href = 'http://192.168.0.9:8080/jw/web/mobile?_cordova=true'; \
+                                    redirectURL = '" + loginPageUrl + "'; \
+                                    console.log('User profile link found: ' + redirectURL); \
                                 } else { \
-                                    console.log('User profile link not found, redirecting to:', '" + url + "'); \
-                                    window.location.href = '" + url + "'; \
-                                    var data = {'action': 'show', 'message': 'true'}; \
-                                    var json = JSON.stringify(data); \
-                                    window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
+                                    console.log('User profile link not found, redirecting to: ' + redirectURL); \
                                 } \
+                                window.location.href = redirectURL; \
+                                var data = {'action': 'show', 'message': 'true'}; \
+                                var json = JSON.stringify(data); \
+                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
