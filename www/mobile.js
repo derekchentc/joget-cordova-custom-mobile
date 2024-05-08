@@ -474,6 +474,7 @@ var MobileApp = {
         if (loginUrl) {
             // perform login
             var callback = function() {
+                console.log(loginUrl);
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
