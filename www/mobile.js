@@ -479,16 +479,12 @@ var MobileApp = {
                     try { \
                         var xhttp = new XMLHttpRequest(); \
                         xhttp.onreadystatechange = function() { \
+                            console.log(JSON.stringify(this)); \
                             if (this.readyState == 4) { \
-                                console.log(this.responseText.trim()); \
-                                if (this.status == 200) { \
-                                    console.log('login valid'); \
-                                }\
                                 console.log('login done'); \
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
-                                console.log(json); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
