@@ -471,13 +471,13 @@ var MobileApp = {
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
-        var parser = document.createElement('a');
-        parser.href = url;
-        var hostUri = parser.protocol + "//" + parser.host;
-        var loginPageUrl = hostUri + "/jw/web/mobile";
         if (loginUrl) {
             // perform login
             var callback = function() {
+                var parser = document.createElement('a');
+                parser.href = url;
+                var hostUri = parser.protocol + "//" + parser.host;
+                var loginPageUrl = hostUri + "/jw/web/mobile";
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
