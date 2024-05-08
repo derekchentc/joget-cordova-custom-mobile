@@ -474,15 +474,24 @@ var MobileApp = {
         if (loginUrl) {
             // perform login
             var callback = function() {
-                console.log(url);
+                var parser = document.createElement('a');
+                parser.href = url;
+                var hostUri = parser.protocol + "//" + parser.host;
+                console.log(hostUri + "/jw/web/login?login_error=1");
                 var loginScript = " \
                     try { \
                         var xhttp = new XMLHttpRequest(); \
                         xhttp.onreadystatechange = function() { \
-                            console.log(JSON.stringify(this)); \
                             if (this.readyState == 4) { \
-                                console.log(JSON.stringify(this)); \
                                 console.log('login done'); \
+                                var responseText = this.responseText;\
+                                if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) {\
+                                    // login unsuccessfull\
+                                    console.log('The <form> tag exists in the response');\
+                                } else {\
+                                    // The specified <form> tag does not exist in the response\
+                                    console.log('The <form> tag does not exist in the response');\
+                                }\
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
