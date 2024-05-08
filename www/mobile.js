@@ -484,14 +484,14 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                var responseText = this.responseText; \
-                                console.log(responseText); \
-                                if (responseText.indexOf('<form id=\"loginForm\" name=\"loginForm\" action=\"/jw/j_spring_security_check\" method=\"POST\">') !== -1) { \
-                                    console.log('login page1: " + loginPageUrl + "'); \
-                                    window.location.href='" + loginPageUrl + "'; \
+                                var responseHTML = this.responseXML; \
+                                var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                                if (profileLink) { \
+                                    console.log('User profile link found:', profileLink.href); \
+                                    window.location.href = profileLink.href; \
                                 } else { \
-                                    console.log('login page2: " + url + "'); \
-                                    window.location.href='" + url + "'; \
+                                    console.log('User profile link not found, redirecting to:', '" + url + "'); \
+                                    window.location.href = '" + url + "'; \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
