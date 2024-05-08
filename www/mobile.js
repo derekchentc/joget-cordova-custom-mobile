@@ -481,6 +481,7 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             console.log(JSON.stringify(this)); \
                             if (this.readyState == 4) { \
+                                console.log(JSON.stringify(this)); \
                                 console.log('login done'); \
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
