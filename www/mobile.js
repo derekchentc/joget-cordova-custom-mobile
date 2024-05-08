@@ -488,6 +488,7 @@ var MobileApp = {
                                 window.location.href='" + url + "'; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
+                                console.log(json); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
