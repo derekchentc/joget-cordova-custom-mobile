@@ -486,7 +486,7 @@ var MobileApp = {
                                 console.log('login done'); \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                console.log(responseHTML); \
+                                console.log(this.responseText); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 var redirectURL = '" + url + "'; \
                                 if (profileLink) { \
