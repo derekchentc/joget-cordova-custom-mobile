@@ -384,7 +384,7 @@ var MobileApp = {
                                     MobileApp.setRememberPassword(profile, rememberPassword);
 
                                     MobilePush.registerDevice();
-                                    MobileApp.loginAndNavigate(fullUrl, username, password);
+                                    MobileApp.loginAndNavigate(fullUrl, username, password, profile);
 
                                     MobileApp.init();
 
@@ -438,7 +438,7 @@ var MobileApp = {
                     var username = MobileApp.getUsername(profile);
                     var password = MobileApp.getPassword(profile);
                     // login and navigate to URL
-                    MobileApp.loginAndNavigate(url, username, password);
+                    MobileApp.loginAndNavigate(url, username, password, profile);
                     login = true;
                     break;
                 }
@@ -451,7 +451,7 @@ var MobileApp = {
         }
     },
 
-    loginAndNavigate: function(url, username, password) {
+    loginAndNavigate: function(url, username, password, profile) {
         var parser = document.createElement('a');
         parser.href = url;
         var hostUri = parser.protocol + "//" + parser.host;
@@ -463,42 +463,14 @@ var MobileApp = {
         newUrl += "_cordova=true";
 
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
-
-        var checkProfileScript = " \
-        var profileExists = false; \
-        try { \
-            var xhttp = new XMLHttpRequest(); \
-            xhttp.onreadystatechange = function() { \
-                if (this.readyState == 4) { \
-                    console.log('profile check done'); \
-                    var parser = new DOMParser(); \
-                    var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                    var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                    if (profileLink) { \
-                        profileExists = true; \
-                        console.log('User profile link found: ' + profileExists); \
-                    } \
-                } \
-            }; \
-            xhttp.open('POST', '" + loginUrl + "', false); \
-            xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
-            xhttp.send('" + credentials + "'); \
-        } catch(e) { \
-            console.log(e); \
-        } \
-        profileExists; \
-        ";
-
-        // Check if the profile exists first
-        var profileExists = eval(checkProfileScript);
-        console.log('Profile exists: ' + profileExists);
-
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, profile);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl) {
+    showFrame: function(url, loginUrl, credentials, loginPageUrl, profile) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
+        console.log("com1: " + MobileApp.getHomeUrl(profile));
+        console.log("com2: " + url);
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
