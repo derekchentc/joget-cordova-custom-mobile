@@ -461,7 +461,7 @@ var MobileApp = {
         var newUrl = url;
         newUrl += (search) ? "&" : "?";
         newUrl += "_cordova=true";
-        MobileApp.showFrame(newUrl, loginUrl, credentials);
+        MobileApp.showFrame("http://192.168.0.9:8080/jw/web/login?login_error=1", loginUrl, credentials);
     },
 
     showFrame: function(url, loginUrl, credentials) {
@@ -472,11 +472,6 @@ var MobileApp = {
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {
-            var parser = document.createElement('a');
-            parser.href = url;
-            console.log("url: " + url);
-            var hostUri = parser.protocol + "//" + parser.host;
-            var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
             // perform login
             var callback = function() {
                 var loginScript = " \
@@ -485,18 +480,10 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                                var redirectURL = '" + url + "'; \
-                                if (profileLink) { \
-                                    redirectURL = '" + loginPageUrl + "'; \
-                                    console.log('User profile link found: ' + redirectURL); \
-                                } else { \
-                                    console.log('User profile link not found, redirecting to: ' + redirectURL); \
-                                } \
-                                console.log('redirectURL: ' + redirectURL); \
-                                redirect(redirectURL); \
+                                window.location.href='" + url + "'; \
+                                var data = {'action': 'show', 'message': 'true'}; \
+                                var json = JSON.stringify(data); \
+                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
@@ -506,15 +493,7 @@ var MobileApp = {
                         document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
                     } catch(e) { \
                         console.log(e); \
-                    } \
-                    function redirect(url) { \
-                        var data = {'action': 'show', 'message': 'true'}; \
-                        var json = JSON.stringify(data); \
-                        window.location.href = url; \
-                        window.onload = function() { \
-                            webkit.messageHandlers.cordova_iab.postMessage(json); \
-                        }; \
-                    }";
+                    } ";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
                     try {
