@@ -486,6 +486,7 @@ var MobileApp = {
                                 console.log('login done'); \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                console.log(responseHTML); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 var redirectURL = '" + url + "'; \
                                 if (profileLink) { \
@@ -524,7 +525,7 @@ var MobileApp = {
                     }
                 } else {
                     // fallback to standard JS eval function
-                        try {
+                    try {
                         MobileApp.inAppBrowser.eval(loginScript);
                         MobileApp.hideLoading();
                     } catch(e) {
