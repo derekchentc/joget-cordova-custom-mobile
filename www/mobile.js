@@ -507,6 +507,7 @@ var MobileApp = {
                         console.log(e); \
                     } \
                     function redirect(url) { \
+                        console.log('final url: ' + url); \
                         var data = {'action': 'show', 'message': 'true'}; \
                         var json = JSON.stringify(data); \
                         window.location.href = url; \
