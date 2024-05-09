@@ -474,7 +474,7 @@ var MobileApp = {
         if (loginUrl) {
             var parser = document.createElement('a');
             parser.href = url;
-            console.log(url);
+            console.log("url: " + url);
             var hostUri = parser.protocol + "//" + parser.host;
             var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
             // perform login
@@ -495,7 +495,7 @@ var MobileApp = {
                                 } else { \
                                     console.log('User profile link not found, redirecting to: ' + redirectURL); \
                                 } \
-                                console.log(redirectURL); \
+                                console.log('redirectURL: ' + redirectURL); \
                                 window.location.href = redirectURL; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
