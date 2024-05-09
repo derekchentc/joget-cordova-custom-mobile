@@ -488,8 +488,9 @@ var MobileApp = {
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 console.log(this.responseText); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                                var loginForm = responseHTML.querySelector('form#loginForm'); \
                                 var redirectURL = '" + url + "'; \
-                                if (profileLink) { \
+                                if (profileLink || loginForm) { \
                                     redirectURL = '" + loginPageUrl + "'; \
                                     console.log('User profile link found: ' + redirectURL); \
                                 } else { \
