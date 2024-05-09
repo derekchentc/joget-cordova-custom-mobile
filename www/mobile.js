@@ -474,8 +474,9 @@ var MobileApp = {
         if (loginUrl) {
             var parser = document.createElement('a');
             parser.href = url;
+            console.log(url);
             var hostUri = parser.protocol + "//" + parser.host;
-            var loginPageUrl = hostUri + "/jw/web/mobile";
+            var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
             // perform login
             var callback = function() {
                 var loginScript = " \
