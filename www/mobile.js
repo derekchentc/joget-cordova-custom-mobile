@@ -483,13 +483,16 @@ var MobileApp = {
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
                                 var parser = new DOMParser(); \
+                                console.log(this.responseText); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 var loginForm = responseHTML.querySelector('form#loginForm'); \
                                 var redirectURL = '" + url + "'; \
                                 if (profileLink || loginForm) { \
                                     redirectURL = '" + loginPageUrl + "'; \
+                                    console.log(redirectURL); \
                                 }\
+                                console.log(redirectURL); \
                                 window.location.href = redirectURL; \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
