@@ -474,8 +474,10 @@ var MobileApp = {
                     var parser = new DOMParser(); \
                     var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                     var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                    profileExists = profileLink !== null; \
-                    console.log('Profile exists: ' + profileExists); \
+                    if (profileLink) { \
+                        profileExists = true; \
+                        console.log('User profile link found: ' + profileExists); \
+                    } \
                 } \
             }; \
             xhttp.open('POST', '" + loginUrl + "', false); \
