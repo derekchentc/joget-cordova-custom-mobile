@@ -384,7 +384,7 @@ var MobileApp = {
                                     MobileApp.setRememberPassword(profile, rememberPassword);
 
                                     MobilePush.registerDevice();
-                                    MobileApp.loginAndNavigate(fullUrl, username, password);
+                                    MobileApp.loginAndNavigate(fullUrl, username, password, profile);
 
                                     MobileApp.init();
 
@@ -438,7 +438,7 @@ var MobileApp = {
                     var username = MobileApp.getUsername(profile);
                     var password = MobileApp.getPassword(profile);
                     // login and navigate to URL
-                    MobileApp.loginAndNavigate(url, username, password);
+                    MobileApp.loginAndNavigate(url, username, password, profile);
                     login = true;
                     break;
                 }
@@ -451,7 +451,7 @@ var MobileApp = {
         }
     },
 
-    loginAndNavigate: function(url, username, password) {
+    loginAndNavigate: function(url, username, password, profile) {
         var parser = document.createElement('a');
         parser.href = url;
         var hostUri = parser.protocol + "//" + parser.host;
@@ -463,16 +463,18 @@ var MobileApp = {
         newUrl += "_cordova=true";
 
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, profile);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl) {
+    showFrame: function(url, loginUrl, credentials, loginPageUrl, profile) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
+        console.log("com1: " + MobileApp.getHomeUrl(profile));
+        console.log("com2: " + url);
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {
             // perform login
             var callback = function() {
@@ -484,16 +486,18 @@ var MobileApp = {
                                 console.log('login done'); \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                console.log(this.responseText); \
                                 var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                                 var loginForm = responseHTML.querySelector('form#loginForm'); \
                                 var redirectURL = '" + url + "'; \
                                 if (profileLink || loginForm) { \
                                     redirectURL = '" + loginPageUrl + "'; \
-                                }\
-                                window.location.href = redirectURL; \
-                                var data = {'action': 'show', 'message': 'true'}; \
-                                var json = JSON.stringify(data); \
-                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
+                                    console.log('User profile link found: ' + redirectURL); \
+                                } else { \
+                                    console.log('User profile link not found, redirecting to: ' + redirectURL); \
+                                } \
+                                console.log('redirectURL: ' + redirectURL); \
+                                redirect(redirectURL); \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
@@ -503,6 +507,15 @@ var MobileApp = {
                         document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
                     } catch(e) { \
                         console.log(e); \
+                    } \
+                    function redirect(url) { \
+                        console.log('final url: ' + url); \
+                        var data = {'action': 'show', 'message': 'true'}; \
+                        var json = JSON.stringify(data); \
+                        window.location.href = url; \
+                        window.onload = function() { \
+                            webkit.messageHandlers.cordova_iab.postMessage(json); \
+                        }; \
                     }";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
