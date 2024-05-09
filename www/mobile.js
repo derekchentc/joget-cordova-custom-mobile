@@ -496,8 +496,11 @@ var MobileApp = {
                                 } else { \
                                     console.log('User profile link not found, redirecting to: ' + redirectURL); \
                                 } \
-                                console.log('redirectURL: ' + redirectURL); \
-                                redirect(redirectURL); \
+                                console.log('final url: ' + redirectURL); \
+                                window.location.href = redirectURL; \
+                                var data = {'action': 'show', 'message': 'true'}; \
+                                var json = JSON.stringify(data); \
+                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
@@ -507,15 +510,6 @@ var MobileApp = {
                         document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
                     } catch(e) { \
                         console.log(e); \
-                    } \
-                    function redirect(url) { \
-                        console.log('final url: ' + url); \
-                        var data = {'action': 'show', 'message': 'true'}; \
-                        var json = JSON.stringify(data); \
-                        window.location.href = url; \
-                        window.onload = function() { \
-                            webkit.messageHandlers.cordova_iab.postMessage(json); \
-                        }; \
                     }";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
