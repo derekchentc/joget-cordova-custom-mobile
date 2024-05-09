@@ -464,6 +464,33 @@ var MobileApp = {
 
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
 
+        var checkProfileScript = " \
+        var profileExists = false; \
+        try { \
+            var xhttp = new XMLHttpRequest(); \
+            xhttp.onreadystatechange = function() { \
+                if (this.readyState == 4) { \
+                    console.log('profile check done'); \
+                    var parser = new DOMParser(); \
+                    var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                    var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                    profileExists = profileLink !== null; \
+                    console.log('Profile exists: ' + profileExists); \
+                } \
+            }; \
+            xhttp.open('POST', '" + loginUrl + "', false); \
+            xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
+            xhttp.send('" + credentials + "'); \
+        } catch(e) { \
+            console.log(e); \
+        } \
+        profileExists; \
+        ";
+
+        // Check if the profile exists first
+        var profileExists = eval(checkProfileScript);
+        console.log('Profile exists: ' + profileExists);
+
         MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl);
     },
 
