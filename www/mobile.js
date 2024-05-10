@@ -497,11 +497,12 @@ var MobileApp = {
                                     console.log('User profile link not found, redirecting to: ' + redirectURL); \
                                 } \
                                 console.log('final url: ' + redirectURL); \
+                                console.log('current url: ' + window.location.href); \
                                 window.location.href = redirectURL; \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
-                                    if (innerText.includes('new PopupDialog')) { \
+                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         console.log('found:'); \
                                         console.log(scripts[i].innerHTML); \
                                     } \
@@ -562,7 +563,7 @@ var MobileApp = {
                 $('script').each(function() { \
                     var innerText = $(this).text(); \
                     if (innerText.includes('new PopupDialog')) { \
-                        console.log('found:'); \
+                        console.log('found123:'); \
                         console.log($(this).html()); \
                     } \
                 }); \
