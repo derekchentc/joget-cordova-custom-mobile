@@ -498,10 +498,14 @@ var MobileApp = {
                                 } \
                                 console.log('final url: ' + redirectURL); \
                                 window.location.href = redirectURL; \
+                                responseHTML.find('script').each(function() { \
+                                    var innerText = $(this).text(); \
+                                    if (innerText.includes('new PopupDialog')) { \
+                                        console.log($(this).html()); \
+                                    } \
+                                });\
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
-                                var scriptContent = $('script:contains(\"new PopupDialog\")').filter(':contains(\"org.joget.plugin.directory.TotpMfaAuthenticator\")')[0].innerHTML; \
-                                console.log(scriptContent); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
                         }; \
@@ -553,8 +557,12 @@ var MobileApp = {
             // search for popup
             MobileApp.inAppBrowser.executeScript({
                 code: "\
-                    var scriptContent = $('script:contains(\"new PopupDialog\")').filter(':contains(\"org.joget.plugin.directory.TotpMfaAuthenticator\")')[0].innerHTML; \
-                    console.log(scriptContent); \
+                $('script').each(function() { \
+                    var innerText = $(this).text(); \
+                    if (innerText.includes('new PopupDialog')) { \
+                        console.log($(this).html()); \
+                    } \
+                }); \
                 "
             });
             console.log("Search for Login Popup");
