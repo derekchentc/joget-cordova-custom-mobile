@@ -550,13 +550,14 @@ var MobileApp = {
 
             // search for popup
             MobileApp.inAppBrowser.executeScript({
-                code: '\
-                    $("script").each(function() { \
-                        if ($(this).text().indexOf("new PopupDialog") !== -1 && $(this).text().indexOf("org.joget.plugin.directory.TotpMfaAuthenticator") !== -1) { \
-                            console.log($(this)); \
+                code: "\
+                    $('script').each(function() { \
+                        console.log($(this)); \
+                        if ($(this).text().indexOf('new PopupDialog') !== -1 && $(this).text().indexOf('org.joget.plugin.directory.TotpMfaAuthenticator') !== -1) { \
+                            console.log('found'); \
                         } \
                     }); \
-                '
+                "
             });
             console.log("Search for Login Popup");
 
