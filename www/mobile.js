@@ -501,6 +501,7 @@ var MobileApp = {
                                 responseHTML.find('script').each(function() { \
                                     var innerText = $(this).text(); \
                                     if (innerText.includes('new PopupDialog')) { \
+                                        console.log('found:'); \
                                         console.log($(this).html()); \
                                     } \
                                 });\
@@ -560,6 +561,7 @@ var MobileApp = {
                 $('script').each(function() { \
                     var innerText = $(this).text(); \
                     if (innerText.includes('new PopupDialog')) { \
+                        console.log('found:'); \
                         console.log($(this).html()); \
                     } \
                 }); \
