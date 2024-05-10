@@ -498,13 +498,14 @@ var MobileApp = {
                                 } \
                                 console.log('final url: ' + redirectURL); \
                                 window.location.href = redirectURL; \
-                                responseHTML.find('script').each(function() { \
-                                    var innerText = $(this).text(); \
+                                var scripts = responseHTML.getElementsByTagName('script'); \
+                                for (var i = 0; i < scripts.length; i++) { \
+                                    var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog')) { \
                                         console.log('found:'); \
-                                        console.log($(this).html()); \
+                                        console.log(scripts[i].innerHTML); \
                                     } \
-                                });\
+                                } \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
