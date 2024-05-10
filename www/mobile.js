@@ -551,7 +551,8 @@ var MobileApp = {
             // search for popup
             MobileApp.inAppBrowser.executeScript({code: "\
                     $('script').each(function() { \
-                        if ($(this).text().indexOf('new PopupDialog') !== -1) { \
+                        var scriptContent = $(this).text(); \
+                        if (scriptContent.includes('new PopupDialog') && scriptContent.includes('org.joget.plugin.directory.TotpMfaAuthenticator') { \
                             console.log($(this).text()); \
                         } \
                     }); \
