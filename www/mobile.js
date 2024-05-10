@@ -552,7 +552,7 @@ var MobileApp = {
             MobileApp.inAppBrowser.executeScript({code: "\
                     $('script').each(function() { \
                         var scriptContent = $(this).text(); \
-                        if (scriptContent.includes('new PopupDialog') && scriptContent.includes('org.joget.plugin.directory.TotpMfaAuthenticator') { \
+                        if (scriptContent.includes('new PopupDialog') && scriptContent.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                             console.log($(this).text()); \
                         } \
                     }); \
