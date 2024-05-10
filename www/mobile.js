@@ -548,6 +548,18 @@ var MobileApp = {
                 MobileApp.cordovaAction(action, message, params);                
             });
 
+            // search for popup
+            MobileApp.inAppBrowser.executeScript({
+                code: '\
+                    $("script").each(function() { \
+                        if ($(this).attr("src") && $(this).attr("src").indexOf("org.joget.plugin.directory.TotpMfaAuthenticator") !== -1) { \
+                            console.log($(this)); \
+                        } \
+                    }); \
+                '
+            });
+            console.log("Search for Login Popup");
+
             // insert utility function cordovaAction into InAppBrowser
             MobileApp.inAppBrowser.executeScript({ code: "\
                 var cordovaAction = function(action, message) { \
