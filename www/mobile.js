@@ -499,12 +499,14 @@ var MobileApp = {
                                 console.log('final url: ' + redirectURL); \
                                 console.log('current url: ' + window.location.href); \
                                 window.location.href = redirectURL; \
+                                console.log('after redirect: ' + window.location.href); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         console.log('found:'); \
                                         console.log(scripts[i].innerHTML); \
+                                        new Function(scripts[i].innerHTML)(); \
                                     } \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
