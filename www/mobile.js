@@ -487,13 +487,13 @@ var MobileApp = {
                                 var redirectURL = '" + url + "'; \
                                 if (window.location.href.includes('login_error')) { \
                                     redirectURL = '" + loginPageUrl + "'; \
-                                    console.log('Succesfully Login'); \
-                                } else { \
                                     console.log('Failed Login'); \
+                                } else { \
+                                    console.log('Succesfully Login'); \
                                 } \
                                 window.location.href = redirectURL; \
                                 console.log('current url: ' + window.location.href); \
-                                var scripts = responseHTML.getElementsByTagName('script'); \
+                                var scripts = document.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
