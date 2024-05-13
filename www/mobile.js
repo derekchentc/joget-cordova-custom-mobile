@@ -512,6 +512,7 @@ var MobileApp = {
                                 var data2 = {'action': 'runScript', 'message': script}; \
                                 var json2 = JSON.stringify(data2); \
                                 window.onload = function() { \
+                                    console.log('finish loaded'); \
                                     webkit.messageHandlers.cordova_iab.postMessage(json); \
                                     webkit.messageHandlers.cordova_iab.postMessage(json2); \
                                 }; \
