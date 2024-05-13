@@ -500,20 +500,21 @@ var MobileApp = {
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        script = scripts[i].innerHTML; \
+                                        script = innerText.trim(); \
                                         if (script.endsWith(';')) { \
                                             script = script.slice(0, -1); \
                                         } \
                                         console.log('Found:' + script); \
-                                        new Function(script)(); \
                                     } \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
-                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                                 var data2 = {'action': 'runScript', 'message': script}; \
                                 var json2 = JSON.stringify(data2); \
-                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json2);}; \
+                                window.onload = function() { \
+                                    webkit.messageHandlers.cordova_iab.postMessage(json); \
+                                    webkit.messageHandlers.cordova_iab.postMessage(json2); \
+                                }; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
@@ -729,6 +730,7 @@ var MobileApp = {
         } else if (action === "runScript") {
             MobileApp.runScript(message);
         } else {
+            console.log('showwwww');
             MobileApp.inAppBrowser.show();
         }
     },
