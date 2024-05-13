@@ -493,13 +493,14 @@ var MobileApp = {
                                 } \
                                 window.location.href = redirectURL; \
                                 console.log('current url: ' + window.location.href); \
-                                var scripts = document.getElementsByTagName('script'); \
+                                var parser = new DOMParser(); \
+                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         var script = scripts[i].innerHTML; \
-                                        console.log('found:'); \
-                                        console.log(script); \
+                                        console.log('Found:' + script); \
                                         new Function(script)(); \
                                     } \
                                 } \
