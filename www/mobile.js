@@ -484,12 +484,14 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                if (!window.location.href.includes('login_error')) { \
-                                    window.location.href = '" + url + "'; \
+                                var redirectURL = '" + url + "'; \
+                                if (window.location.href.includes('login_error')) { \
+                                    redirectURL = '" + loginPageUrl + "'; \
                                     console.log('Succesfully Login'); \
                                 } else { \
                                     console.log('Failed Login'); \
                                 } \
+                                window.location.href = redirectURL; \
                                 console.log('current url: ' + window.location.href); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
