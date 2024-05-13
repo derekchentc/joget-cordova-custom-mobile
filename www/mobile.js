@@ -505,8 +505,9 @@ var MobileApp = {
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         console.log('found:'); \
-                                        console.log(scripts[i].innerHTML); \
-                                        new Function(scripts[i].innerHTML)(); \
+                                        var script = scripts[i].innerHTML.slice(0, -1); \
+                                        console.log(script); \
+                                        new Function(script)(); \
                                     } \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
