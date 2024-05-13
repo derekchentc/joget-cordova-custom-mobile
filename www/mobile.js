@@ -504,10 +504,20 @@ var MobileApp = {
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
+                                        var script = scripts[i]; \
                                         console.log('found:'); \
-                                        var script = scripts[i].innerHTML.slice(0, -1); \
                                         console.log(script); \
                                         new Function(script)(); \
+                                    } \
+                                } \
+                                var scripts2 = document.getElementsByTagName('script'); \
+                                for (var j = 0; j < scripts2.length; j++) { \
+                                    var innerText = scripts2[j].innerHTML; \
+                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
+                                        var script2 = scripts[j]; \
+                                        console.log('found2:'); \
+                                        console.log(script2); \
+                                        new Function(script2)(); \
                                     } \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
