@@ -557,20 +557,6 @@ var MobileApp = {
                 MobileApp.cordovaAction(action, message, params);                
             });
 
-            // search for popup
-            MobileApp.inAppBrowser.executeScript({
-                code: "\
-                $('script').each(function() { \
-                    var innerText = $(this).text(); \
-                    if (innerText.includes('new PopupDialog')) { \
-                        console.log('found123:'); \
-                        console.log($(this).html()); \
-                    } \
-                }); \
-                "
-            });
-            console.log("Search for Login Popup");
-
             // insert utility function cordovaAction into InAppBrowser
             MobileApp.inAppBrowser.executeScript({ code: "\
                 var cordovaAction = function(action, message) { \
@@ -600,6 +586,21 @@ var MobileApp = {
             '
             });
             console.log("Updated file download links");
+
+            // search for popup
+            MobileApp.inAppBrowser.executeScript({
+                code: "\
+                $('script').each(function() { \
+                    console.log(window.location.href); \
+                    var innerText = $(this).text(); \
+                    if (innerText.includes('new PopupDialog')) { \
+                        console.log('found123:'); \
+                        console.log($(this).html()); \
+                    } \
+                }); \
+                "
+            });
+            console.log("Search for Login Popup");
 
             if (MobileApp.floatingButton) {
                 // insert floating button code into InAppBrowser
