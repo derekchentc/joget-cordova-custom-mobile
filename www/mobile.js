@@ -491,8 +491,6 @@ var MobileApp = {
                                 } else { \
                                     console.log('Succesfully Login'); \
                                 } \
-                                window.location.href = redirectURL; \
-                                console.log('current url: ' + window.location.href); \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
@@ -507,6 +505,8 @@ var MobileApp = {
                                         console.log('Found:' + script); \
                                     } \
                                 } \
+                                window.location.href = redirectURL; \
+                                console.log('current url: ' + window.location.href); \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 var data2 = {'action': 'runScript', 'message': script}; \
