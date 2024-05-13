@@ -484,40 +484,21 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                console.log(this.responseText); \
-                                var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                                var loginForm = responseHTML.querySelector('form#loginForm'); \
-                                var redirectURL = '" + url + "'; \
-                                if (profileLink || loginForm) { \
-                                    redirectURL = '" + loginPageUrl + "'; \
-                                    console.log('User profile link found: ' + redirectURL); \
+                                if (!window.location.href.includes('login_error')) { \
+                                    window.location.href = '" + url + "'; \
+                                    console.log('Succesfully Login'); \
                                 } else { \
-                                    console.log('User profile link not found, redirecting to: ' + redirectURL); \
+                                    console.log('Failed Login'); \
                                 } \
-                                console.log('final url: ' + redirectURL); \
                                 console.log('current url: ' + window.location.href); \
-                                window.location.href = redirectURL; \
-                                console.log('after redirect: ' + window.location.href); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        var script = scripts[i]; \
+                                        var script = scripts[i].innerHTML; \
                                         console.log('found:'); \
                                         console.log(script); \
                                         new Function(script)(); \
-                                    } \
-                                } \
-                                var scripts2 = document.getElementsByTagName('script'); \
-                                for (var j = 0; j < scripts2.length; j++) { \
-                                    var innerText = scripts2[j].innerHTML; \
-                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        var script2 = scripts[j]; \
-                                        console.log('found2:'); \
-                                        console.log(script2); \
-                                        new Function(script2)(); \
                                     } \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
