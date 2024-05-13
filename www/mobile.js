@@ -496,10 +496,11 @@ var MobileApp = {
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
+                                var script; \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        var script = scripts[i].innerHTML; \
+                                        script = scripts[i].innerHTML; \
                                         if (script.endsWith(';')) { \
                                             script = script.slice(0, -1); \
                                         } \
@@ -510,6 +511,9 @@ var MobileApp = {
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
+                                var data2 = {'action': 'runScript', 'message': script}; \
+                                var json2 = JSON.stringify(data2); \
+                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json2);}; \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
@@ -591,7 +595,6 @@ var MobileApp = {
             MobileApp.inAppBrowser.executeScript({
                 code: "\
                 $('script').each(function() { \
-                    console.log(window.location.href); \
                     var innerText = $(this).text(); \
                     if (innerText.includes('new PopupDialog')) { \
                         console.log('found123:'); \
@@ -642,19 +645,6 @@ var MobileApp = {
                 });
                 console.log("Inserted floating button CSS");
             }
-
-            console.log("Find totp");
-            var scripts = document.getElementsByTagName('script');
-            for (var i = 0; i < scripts.length; i++) {
-                var innerText = scripts[i].innerHTML;
-                if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) {
-                    var script = scripts[i].innerHTML;
-                    if (script.endsWith(';')) {
-                        script = script.slice(0, -1);
-                    }
-                    console.log('Final Found:' + script);
-                }
-            } 
         });
 
         // init geolocation permission
@@ -662,6 +652,10 @@ var MobileApp = {
             navigator.geolocation.getCurrentPosition(function(position) { console.log(position) });
             console.log("Geolocation initialized");
         }
+    },
+
+    runScript: function(script) {
+        console.log('Running script:' + script);
     },
 
     closeFrame: function() {
@@ -732,6 +726,8 @@ var MobileApp = {
         } else if (action === "alert") {
             var message = params.data.message;
             navigator.notification.alert(message);
+        } else if (action === "runScript") {
+            MobileApp.runScript(message);
         } else {
             MobileApp.inAppBrowser.show();
         }
