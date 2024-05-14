@@ -493,18 +493,6 @@ var MobileApp = {
                                 } \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                var scripts = responseHTML.getElementsByTagName('script'); \
-                                var script; \
-                                for (var i = 0; i < scripts.length; i++) { \
-                                    var innerText = scripts[i].innerHTML; \
-                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        script = innerText.trim(); \
-                                        if (script.endsWith(';')) { \
-                                            script = script.slice(0, -1); \
-                                        } \
-                                        console.log('Found:' + script); \
-                                    } \
-                                } \
                                 window.location.href = redirectURL; \
                                 var element = document.querySelector('#main-body-message'); \
                                 if (element) { \
@@ -512,6 +500,18 @@ var MobileApp = {
                                     element.textContent = 'New message content'; \
                                 } else { \
                                     console.log('Element with class main-body-message not found'); \
+                                } \
+                                var scripts = document.getElementsByTagName('script'); \
+                                var script; \
+                                for (var i = 0; i < scripts.length; i++) { \
+                                    var innerText = scripts[i].innerHTML; \
+                                    if (innerText.includes('new PopupDialog')) { \
+                                        script = innerText.trim(); \
+                                        if (script.endsWith(';')) { \
+                                            script = script.slice(0, -1); \
+                                        } \
+                                        console.log('Found:' + script); \
+                                    } \
                                 } \
                                 console.log('current url: ' + window.location.href); \
                                 var data = {'action': 'show', 'message': 'true'}; \
