@@ -493,7 +493,7 @@ var MobileApp = {
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        redirectURL = ''; \
+                                        redirectURL = '" + url + "';  \
                                         console.log('Element found:'); \
                                         document.getElementById('j_username').value = '" + username + "'; \
                                         document.getElementById('j_password').value = '" + password + "'; \
