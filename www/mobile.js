@@ -552,7 +552,7 @@ var MobileApp = {
                 console.log("login: " + loginUrl);
                 MobileApp.inAppBrowser.removeEventListener("loadstop", callback);
                 MobileApp.inAppBrowser.removeEventListener("load", callback);
-            };
+            });
             MobileApp.inAppBrowser.addEventListener("loadstop", callback);
             MobileApp.inAppBrowser.addEventListener("load", callback);
         }
