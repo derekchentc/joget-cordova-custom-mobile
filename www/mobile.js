@@ -491,21 +491,17 @@ var MobileApp = {
                                     var parser = new DOMParser(); \
                                     var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                     var scripts = responseHTML.getElementsByTagName('script'); \
-                                    var script; \
                                     for (var i = 0; i < scripts.length; i++) { \
                                         var innerText = scripts[i].innerHTML; \
                                         if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                             redirectURL='' \
-                                            script = innerText.trim(); \
-                                            if (script.endsWith(';')) { \
-                                                script = script.slice(0, -1); \
-                                            } \
                                             console.log('Element found:'); \
                                             $('#j_username').val('" + username + "'); \
                                             $('#j_password').val('" + password + "'); \
                                             var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
                                             if (loginButton) { \
                                                 loginButton.click(); \
+                                                console.log('Button clicked'); \
                                             } else { \
                                                 console.log('Button not found'); \
                                             } \
@@ -600,20 +596,6 @@ var MobileApp = {
             '
             });
             console.log("Updated file download links");
-
-            // search for popup
-            MobileApp.inAppBrowser.executeScript({
-                code: "\
-                $('script').each(function() { \
-                    var innerText = $(this).text(); \
-                    if (innerText.includes('new PopupDialog')) { \
-                        console.log('found123:'); \
-                        console.log($(this).html()); \
-                    } \
-                }); \
-                "
-            });
-            console.log("Search for Login Popup");
 
             if (MobileApp.floatingButton) {
                 // insert floating button code into InAppBrowser
