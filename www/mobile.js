@@ -540,6 +540,7 @@ var MobileApp = {
                                 MobileApp.inAppBrowser.executeScript({code: loginScript});
                             });
                         });
+                    } catch(e) {
                         console.log(e);
                     }
                 } else {
