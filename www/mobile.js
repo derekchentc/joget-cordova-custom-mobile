@@ -496,8 +496,8 @@ var MobileApp = {
                                 window.location.href = redirectURL; \
                                 var element = document.querySelector('#main-body-message'); \
                                 if (element) { \
-                                    console.log('Element found:', element); \
-                                    element.textContent = 'New message content'; \
+                                    var text = element.textContent; \
+                                    console.log('Element found:', text); \
                                 } else { \
                                     console.log('Element with class main-body-message not found'); \
                                 } \
