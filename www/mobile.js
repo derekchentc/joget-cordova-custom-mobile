@@ -534,9 +534,12 @@ var MobileApp = {
                     try {
                         MobileApp.inAppBrowser.executeScript({
                             code: "window.location.href = '" + loginPageUrl + "';"
+                        }, function() {
+                            // Wait for the new page to load
+                            MobileApp.inAppBrowser.addEventListener("loadstop", function() {
+                                MobileApp.inAppBrowser.executeScript({code: loginScript});
+                            });
                         });
-                        MobileApp.inAppBrowser.executeScript({code: loginScript});
-                    } catch(e) {
                         console.log(e);
                     }
                 } else {
