@@ -508,8 +508,8 @@ var MobileApp = {
                                 window.location.href = redirectURL; \
                                 if (script) { \
                                     console.log('Element found:'); \
-                                    $('#j_username').text('admin'); \
-                                    $('#j_password').text('4321@Sadcase'); \
+                                    $('#j_username').val('admin'); \
+                                    $('#j_password').val('4321@Sadcase'); \
                                     var element = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
                                     if (element) { \
                                         element.click(); \
