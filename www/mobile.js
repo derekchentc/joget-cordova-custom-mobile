@@ -506,15 +506,19 @@ var MobileApp = {
                                     } \
                                 } \
                                 window.location.href = redirectURL; \
+                                var element = document.querySelector('#main-body-message'); \
+                                if (element) { \
+                                    console.log('Element found:', element); \
+                                    element.textContent = 'New message content'; \
+                                } else { \
+                                    console.log('Element with class main-body-message not found'); \
+                                } \
                                 console.log('current url: ' + window.location.href); \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
-                                var data2 = {'action': 'runScript', 'message': script}; \
-                                var json2 = JSON.stringify(data2); \
                                 window.onload = function() { \
                                     console.log('finish loaded'); \
                                     webkit.messageHandlers.cordova_iab.postMessage(json); \
-                                    webkit.messageHandlers.cordova_iab.postMessage(json2); \
                                 }; \
                             } \
                         }; \
