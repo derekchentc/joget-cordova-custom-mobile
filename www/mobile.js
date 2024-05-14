@@ -477,59 +477,60 @@ var MobileApp = {
         MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {
             // perform login
-            var callback = function() {
+            var callback = function () {
                 var loginScript = " \
-                    try { \
-                        var xhttp = new XMLHttpRequest(); \
-                        xhttp.onreadystatechange = function() { \
-                            if (this.readyState == 4) { \
-                                console.log('login done'); \
-                                var redirectURL = '" + url + "'; \
-                                if (window.location.href.includes('login_error')) { \
-                                    redirectURL = '" + loginPageUrl + "'; \
-                                    console.log('Failed Login'); \
-                                    var parser = new DOMParser(); \
-                                    var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                    var scripts = responseHTML.getElementsByTagName('script'); \
-                                    for (var i = 0; i < scripts.length; i++) { \
-                                        var innerText = scripts[i].innerHTML; \
-                                        if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                            redirectURL='' \
-                                            console.log('Element found:'); \
-                                            $('#j_username').val('" + username + "'); \
-                                            $('#j_password').val('" + password + "'); \
-                                            var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
-                                            if (loginButton) { \
-                                                loginButton.click(); \
-                                                console.log('Button clicked'); \
-                                            } else { \
-                                                console.log('Button not found'); \
-                                            } \
+                try { \
+                    var xhttp = new XMLHttpRequest(); \
+                    xhttp.onreadystatechange = function() { \
+                        if (this.readyState == 4) { \
+                            console.log('login done'); \
+                            var redirectURL = '" + url + "'; \
+                            if (window.location.href.includes('login_error')) { \
+                                redirectURL = '" + loginPageUrl + "'; \
+                                console.log('Failed Login'); \
+                                var parser = new DOMParser(); \
+                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                var scripts = responseHTML.getElementsByTagName('script'); \
+                                for (var i = 0; i < scripts.length; i++) { \
+                                    var innerText = scripts[i].innerHTML; \
+                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
+                                        redirectURL = ''; \
+                                        console.log('Element found:'); \
+                                        document.getElementById('j_username').value = '" + username + "'; \
+                                        document.getElementById('j_password').value = '" + password + "'; \
+                                        var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
+                                        if (loginButton) { \
+                                            loginButton.click(); \
+                                            console.log('Button clicked'); \
+                                        } else { \
+                                            console.log('Button not found'); \
                                         } \
                                     } \
                                 } \
-                                if (redirectURL) { \
-                                    console.log('Do redirect'); \
-                                    window.location.href = redirectURL; \
-                                } else { \
-                                    console.log('No redirect'); \
-                                } \
-                                console.log('current url: ' + window.location.href); \
-                                var data = {'action': 'show', 'message': 'true'}; \
-                                var json = JSON.stringify(data); \
-                                window.onload = function() { \
+                            } \
+                            if (redirectURL) { \
+                                console.log('Do redirect'); \
+                                window.location.href = redirectURL; \
+                            } else { \
+                                console.log('No redirect'); \
+                            } \
+                            console.log('current url: ' + window.location.href); \
+                            var data = {'action': 'show', 'message': 'true'}; \
+                            var json = JSON.stringify(data); \
+                            window.onload = function() { \
                                 console.log('finish loaded'); \
                                 webkit.messageHandlers.cordova_iab.postMessage(json); \
-                            } \
-                        }; \
-                        xhttp.open('POST', '" + loginUrl + "', false); \
-                        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
-                        console.log('logging in'); \
-                        xhttp.send('" + credentials + "'); \
-                        document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
-                    } catch(e) { \
-                        console.log(e); \
-                    }";
+                            }; \
+                        } \
+                    }; \
+                    xhttp.open('POST', '" + loginUrl + "', false); \
+                    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
+                    console.log('logging in'); \
+                    xhttp.send('" + credentials + "'); \
+                    document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
+                } catch(e) { \
+                    console.log(e); \
+                }";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
                     try {
