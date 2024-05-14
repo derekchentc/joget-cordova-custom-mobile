@@ -463,10 +463,10 @@ var MobileApp = {
         newUrl += "_cordova=true";
 
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, profile);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, profile, username, password);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl, profile) {
+    showFrame: function(url, loginUrl, credentials, loginPageUrl, profile, username, password) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
         console.log("com1: " + MobileApp.getHomeUrl(profile));
@@ -507,8 +507,8 @@ var MobileApp = {
                                 } \
                                 if (script) { \
                                     console.log('Element found:'); \
-                                    $('#j_username').val('admin'); \
-                                    $('#j_password').val('4321@Sadcase'); \
+                                    $('#j_username').val('" + username + "'); \
+                                    $('#j_password').val('" + password + "'); \
                                     var element = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
                                     if (element) { \
                                         element.click(); \
