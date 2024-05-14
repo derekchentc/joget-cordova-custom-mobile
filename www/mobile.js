@@ -476,7 +476,11 @@ var MobileApp = {
         if (loginUrl) {
             // perform login
             var callback = function () {
-                var loginScript = " \
+                // Redirect to the login URL
+                MobileApp.inAppBrowser.executeScript({
+                    code: "window.location.href = '" + loginPageUrl + "';"
+                }, function () {
+                    var loginScript = " \
                 try { \
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
@@ -517,7 +521,6 @@ var MobileApp = {
                             var data = {'action': 'show', 'message': 'true'}; \
                             var json = JSON.stringify(data); \
                             window.onload = function() { \
-                                console.log('finish loaded'); \
                                 webkit.messageHandlers.cordova_iab.postMessage(json); \
                             }; \
                         } \
@@ -526,7 +529,6 @@ var MobileApp = {
                     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
                     console.log('logging in'); \
                     xhttp.send('" + credentials + "'); \
-                    window.location.href = '" + loginPageUrl + "'; \
                     document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
                 } catch(e) { \
                     console.log(e); \
