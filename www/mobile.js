@@ -505,7 +505,7 @@ var MobileApp = {
                                         console.log('Found:' + script); \
                                     } \
                                 } \
-                                window.location.href = redirectURL; \
+                               
                                 if (script) { \
                                     console.log('Element found:'); \
                                     $('#j_username').val('admin'); \
