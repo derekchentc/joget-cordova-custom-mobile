@@ -476,11 +476,7 @@ var MobileApp = {
         if (loginUrl) {
             // perform login
             var callback = function () {
-                // Redirect to the login URL
-                MobileApp.inAppBrowser.executeScript({
-                    code: "window.location.href = '" + loginPageUrl + "';"
-                }, function () {
-                    var loginScript = " \
+                var loginScript = " \
                 try { \
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
@@ -536,6 +532,9 @@ var MobileApp = {
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
                     try {
+                        MobileApp.inAppBrowser.executeScript({
+                            code: "window.location.href = '" + loginPageUrl + "';"
+                        });
                         MobileApp.inAppBrowser.executeScript({code: loginScript});
                     } catch(e) {
                         console.log(e);
@@ -552,7 +551,7 @@ var MobileApp = {
                 console.log("login: " + loginUrl);
                 MobileApp.inAppBrowser.removeEventListener("loadstop", callback);
                 MobileApp.inAppBrowser.removeEventListener("load", callback);
-            });
+            };
             MobileApp.inAppBrowser.addEventListener("loadstop", callback);
             MobileApp.inAppBrowser.addEventListener("load", callback);
         }
