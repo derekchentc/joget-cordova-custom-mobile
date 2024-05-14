@@ -493,25 +493,31 @@ var MobileApp = {
                                 } \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                window.location.href = redirectURL; \
-                                var element = document.querySelector('#main-body-message'); \
-                                if (element) { \
-                                    var text = element.textContent; \
-                                    console.log('Element found:', text); \
-                                } else { \
-                                    console.log('Element with class main-body-message not found'); \
-                                } \
                                 var scripts = document.getElementsByTagName('script'); \
                                 var script; \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
-                                    if (innerText.includes('new PopupDialog')) { \
+                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         script = innerText.trim(); \
                                         if (script.endsWith(';')) { \
                                             script = script.slice(0, -1); \
                                         } \
                                         console.log('Found:' + script); \
                                     } \
+                                } \
+                                window.location.href = redirectURL; \
+                                if (script) { \
+                                    console.log('Element found:', text); \
+                                    $('#j_username).text('admin'); \
+                                    $('#j_password).text('4321@Sadcase'); \
+                                    var element = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
+                                    if (element) { \
+                                        element.click(); \
+                                    } else { \
+                                        console.log('Element not found'); \
+                                    } \
+                                } else { \
+                                    console.log('Element with class main-body-message not found'); \
                                 } \
                                 console.log('current url: ' + window.location.href); \
                                 var data = {'action': 'show', 'message': 'true'}; \
