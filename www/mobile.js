@@ -469,8 +469,6 @@ var MobileApp = {
     showFrame: function(url, loginUrl, credentials, loginPageUrl, profile, username, password) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
-        console.log("com1: " + MobileApp.getHomeUrl(profile));
-        console.log("com2: " + url);
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
@@ -485,12 +483,12 @@ var MobileApp = {
                         if (this.readyState == 4) { \
                             console.log('login done'); \
                             var redirectURL = '" + url + "'; \
-                            console.log('current url: ' + window.location.href); \
-                            if (window.location.href.includes('login_error')) { \
+                            var parser = new DOMParser(); \
+                            var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                            var metaRefresh = document.querySelector('meta[http-equiv=\"REFRESH\"]'); \
+                            if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
                                 console.log('Failed Login'); \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
