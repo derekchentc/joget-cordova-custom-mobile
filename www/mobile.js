@@ -472,16 +472,18 @@ var MobileApp = {
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {
             // perform login
             var callback = function () {
                 var loginScript = " \
                 try { \
+                    window.location.href = '" + loginPageUrl + "'; \
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
                         if (this.readyState == 4) { \
                             console.log('login done'); \
+                            console.log('current url: ' + window.location.href); \
                             var redirectURL = '" + url + "'; \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
