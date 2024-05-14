@@ -485,6 +485,7 @@ var MobileApp = {
                         if (this.readyState == 4) { \
                             console.log('login done'); \
                             var redirectURL = '" + url + "'; \
+                            console.log('current url: ' + window.location.href); \
                             if (window.location.href.includes('login_error')) { \
                                 redirectURL = '" + loginPageUrl + "'; \
                                 console.log('Failed Login'); \
@@ -514,7 +515,6 @@ var MobileApp = {
                             } else { \
                                 console.log('No redirect'); \
                             } \
-                            console.log('current url: ' + window.location.href); \
                             var data = {'action': 'show', 'message': 'true'}; \
                             var json = JSON.stringify(data); \
                             window.onload = function() { \
