@@ -488,43 +488,42 @@ var MobileApp = {
                                 if (window.location.href.includes('login_error')) { \
                                     redirectURL = '" + loginPageUrl + "'; \
                                     console.log('Failed Login'); \
-                                } else { \
-                                    console.log('Succesfully Login'); \
-                                } \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                var scripts = responseHTML.getElementsByTagName('script'); \
-                                var script; \
-                                for (var i = 0; i < scripts.length; i++) { \
-                                    var innerText = scripts[i].innerHTML; \
-                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        script = innerText.trim(); \
-                                        if (script.endsWith(';')) { \
-                                            script = script.slice(0, -1); \
+                                    var parser = new DOMParser(); \
+                                    var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                    var scripts = responseHTML.getElementsByTagName('script'); \
+                                    var script; \
+                                    for (var i = 0; i < scripts.length; i++) { \
+                                        var innerText = scripts[i].innerHTML; \
+                                        if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
+                                            redirectURL='' \
+                                            script = innerText.trim(); \
+                                            if (script.endsWith(';')) { \
+                                                script = script.slice(0, -1); \
+                                            } \
+                                            console.log('Element found:'); \
+                                            $('#j_username').val('" + username + "'); \
+                                            $('#j_password').val('" + password + "'); \
+                                            var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
+                                            if (loginButton) { \
+                                                loginButton.click(); \
+                                            } else { \
+                                                console.log('Button not found'); \
+                                            } \
                                         } \
-                                        console.log('Found:' + script); \
                                     } \
                                 } \
-                                if (script) { \
-                                    console.log('Element found:'); \
-                                    $('#j_username').val('" + username + "'); \
-                                    $('#j_password').val('" + password + "'); \
-                                    var element = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
-                                    if (element) { \
-                                        element.click(); \
-                                    } else { \
-                                        console.log('Button not found'); \
-                                    } \
+                                if (redirectURL) { \
+                                    console.log('Do redirect'); \
+                                    window.location.href = redirectURL; \
                                 } else { \
-                                    console.log('Element with class main-body-message not found'); \
+                                    console.log('No redirect'); \
                                 } \
                                 console.log('current url: ' + window.location.href); \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload = function() { \
-                                    console.log('finish loaded'); \
-                                    webkit.messageHandlers.cordova_iab.postMessage(json); \
-                                }; \
+                                console.log('finish loaded'); \
+                                webkit.messageHandlers.cordova_iab.postMessage(json); \
                             } \
                         }; \
                         xhttp.open('POST', '" + loginUrl + "', false); \
