@@ -505,7 +505,6 @@ var MobileApp = {
                                         console.log('Found:' + script); \
                                     } \
                                 } \
-                               
                                 if (script) { \
                                     console.log('Element found:'); \
                                     $('#j_username').val('admin'); \
