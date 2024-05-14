@@ -507,14 +507,14 @@ var MobileApp = {
                                 } \
                                 window.location.href = redirectURL; \
                                 if (script) { \
-                                    console.log('Element found:', text); \
-                                    $('#j_username).text('admin'); \
-                                    $('#j_password).text('4321@Sadcase'); \
+                                    console.log('Element found:'); \
+                                    $('#j_username').text('admin'); \
+                                    $('#j_password').text('4321@Sadcase'); \
                                     var element = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
                                     if (element) { \
                                         element.click(); \
                                     } else { \
-                                        console.log('Element not found'); \
+                                        console.log('Button not found'); \
                                     } \
                                 } else { \
                                     console.log('Element with class main-body-message not found'); \
