@@ -478,7 +478,6 @@ var MobileApp = {
             var callback = function () {
                 var loginScript = " \
                 try { \
-                    window.location.href = '" + loginPageUrl + "'; \
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
                         if (this.readyState == 4) { \
@@ -527,6 +526,7 @@ var MobileApp = {
                     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
                     console.log('logging in'); \
                     xhttp.send('" + credentials + "'); \
+                    window.location.href = '" + loginPageUrl + "'; \
                     document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
                 } catch(e) { \
                     console.log(e); \
