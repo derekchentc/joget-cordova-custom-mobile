@@ -485,7 +485,7 @@ var MobileApp = {
                             var redirectURL = '" + url + "'; \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                            var metaRefresh = document.querySelector('meta[http-equiv=\"REFRESH\"]'); \
+                            var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
                                 console.log('Failed Login'); \
