@@ -493,7 +493,7 @@ var MobileApp = {
                                 } \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                var scripts = document.getElementsByTagName('script'); \
+                                var scripts = responseHTML.getElementsByTagName('script'); \
                                 var script; \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
