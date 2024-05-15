@@ -485,7 +485,7 @@ var MobileApp = {
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
                         if (this.readyState == 4) { \
-                            var redirectURL = '" + url + "'; \
+                            var redirectURL = '" + initialUrl + "'; \
                             console.log('redirectURL: ' + redirectURL); \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
@@ -493,7 +493,7 @@ var MobileApp = {
                             var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
                             var loginForm = responseHTML.querySelector('form#loginForm'); \
                             if (profileLink || loginForm) { \
-                                redirectURL = '" + loginPageUrl + "'; \
+                                redirectURL = '" + initialUrl + "'; \
                                 console.log('redirectURL2: ' + redirectURL); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
