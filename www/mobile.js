@@ -485,11 +485,13 @@ var MobileApp = {
                     xhttp.onreadystatechange = function() { \
                         if (this.readyState == 4) { \
                             var redirectURL = '" + url + "'; \
+                            console.log('redirectURL: ' + redirectURL); \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
+                                console.log('redirectURL2: ' + redirectURL); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
@@ -505,6 +507,7 @@ var MobileApp = {
                                 } \
                             } \
                             if (redirectURL) { \
+                                console.log('currentURL: ' + redirectURL); \
                                 window.location.href = redirectURL; \
                             } \
                             var data = {'action': 'show', 'message': 'true'}; \
