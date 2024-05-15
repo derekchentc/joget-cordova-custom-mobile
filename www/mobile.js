@@ -486,9 +486,8 @@ var MobileApp = {
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                             console.log('responseHTML: ' + this.responseText); \
-                            var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                            var loginForm = responseHTML.querySelector('form#loginForm'); \
-                            if (profileLink || loginForm) { \
+                            var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
+                            if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
                                 console.log('redirectURL2: ' + redirectURL); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
