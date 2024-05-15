@@ -492,7 +492,7 @@ var MobileApp = {
                             console.log('responseHTML: ' + this.responseText); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
-                                redirectURL = '" + loginPageUrl + "?login_error=1'; \
+                                redirectURL = '" + loginPageUrl + "'; \
                                 console.log('redirectURL2: ' + redirectURL); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
