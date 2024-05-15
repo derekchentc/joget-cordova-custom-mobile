@@ -481,53 +481,25 @@ var MobileApp = {
             // perform login
             var callback = function () {
                 var loginScript = " \
-                try { \
-                    var xhttp = new XMLHttpRequest(); \
-                    xhttp.onreadystatechange = function() { \
-                        if (this.readyState == 4) { \
-                            var redirectURL = '" + initialUrl + "'; \
-                            console.log('redirectURL: ' + redirectURL); \
-                            var parser = new DOMParser(); \
-                            var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                            console.log('responseHTML: ' + this.responseText); \
-                            var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                            var loginForm = responseHTML.querySelector('form#loginForm'); \
-                            if (profileLink || loginForm) { \
-                                redirectURL = '" + initialUrl + "'; \
-                                console.log('redirectURL2: ' + redirectURL); \
-                                var scripts = responseHTML.getElementsByTagName('script'); \
-                                for (var i = 0; i < scripts.length; i++) { \
-                                    var innerText = scripts[i].innerHTML; \
-                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
-                                        redirectURL = '';  \
-                                        document.getElementById('j_username').value = '" + username + "'; \
-                                        document.getElementById('j_password').value = '" + password + "'; \
-                                        var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
-                                        if (loginButton) { \
-                                            loginButton.click(); \
-                                        }\
-                                    } \
-                                } \
+                    try { \
+                        var xhttp = new XMLHttpRequest(); \
+                        xhttp.onreadystatechange = function() { \
+                            if (this.readyState == 4) { \
+                                console.log('login done'); \
+                                window.location.href='" + initialUrl + "'; \
+                                var data = {'action': 'show', 'message': 'true'}; \
+                                var json = JSON.stringify(data); \
+                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
                             } \
-                            if (redirectURL) { \
-                                console.log('currentURL: ' + redirectURL); \
-                                window.location.href = redirectURL; \
-                            } \
-                            var data = {'action': 'show', 'message': 'true'}; \
-                            var json = JSON.stringify(data); \
-                            window.onload = function() { \
-                                webkit.messageHandlers.cordova_iab.postMessage(json); \
-                            }; \
-                        } \
-                    }; \
-                    xhttp.open('POST', '" + loginUrl + "', false); \
-                    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
-                    console.log('logging in'); \
-                    xhttp.send('" + credentials + "'); \
-                    document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
-                } catch(e) { \
-                    console.log(e); \
-                }";
+                        }; \
+                        xhttp.open('POST', '" + loginUrl + "', false); \
+                        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
+                        console.log('logging in'); \
+                        xhttp.send('" + credentials + "'); \
+                        document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
+                    } catch(e) { \
+                        console.log(e); \
+                    } ";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
                     try {
@@ -716,10 +688,7 @@ var MobileApp = {
         } else if (action === "alert") {
             var message = params.data.message;
             navigator.notification.alert(message);
-        } else if (action === "runScript") {
-            MobileApp.runScript(message);
         } else {
-            console.log('showwwww');
             MobileApp.inAppBrowser.show();
         }
     },
