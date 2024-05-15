@@ -461,8 +461,8 @@ var MobileApp = {
         var newUrl = url;
         newUrl += (search) ? "&" : "?";
         newUrl += "_cordova=true";
-        var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
-        var initialUrl = hostUri + "/jw/web/mobile?_cordova=true";
+        var loginPageUrl = hostUri + "/jw/web/mobile";
+        var initialUrl = hostUri + "/jw/web/mobile";
         if (newUrl.indexOf("/web/userview/") > 0) {
             initialUrl = newUrl.replace('userview','ulogin');
         }
