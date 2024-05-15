@@ -463,8 +463,8 @@ var MobileApp = {
         newUrl += "_cordova=true";
         var loginPageUrl = hostUri + "/jw/web/mobile";
         var initialUrl = hostUri + "/jw/web/mobile";
-        if (newUrl.indexOf("/web/userview/") > 0) {
-            initialUrl = newUrl.replace('userview','ulogin');
+        if (url.indexOf("/web/userview/") > 0) {
+            initialUrl = url.replace('userview','ulogin');
         }
         MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password, initialUrl);
     },
