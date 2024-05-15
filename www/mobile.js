@@ -486,7 +486,16 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                window.location.href='" + initialUrl + "'; \
+                                var parser = new DOMParser(); \
+                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                console.log('responseHTML: ' + this.responseText); \
+                                var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                                var loginForm = responseHTML.querySelector('form#loginForm'); \
+                                if (profileLink || loginForm) {\
+                                    window.location.href='" + loginPageUrl + "'; \
+                                }\ else {\
+                                    window.location.href='" + initialUrl + "'; \
+                                }\
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
