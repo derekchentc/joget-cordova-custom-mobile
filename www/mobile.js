@@ -488,6 +488,7 @@ var MobileApp = {
                             console.log('redirectURL: ' + redirectURL); \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                            console.log('responseHTML: ' + responseHTML); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
