@@ -384,7 +384,7 @@ var MobileApp = {
                                     MobileApp.setRememberPassword(profile, rememberPassword);
 
                                     MobilePush.registerDevice();
-                                    MobileApp.loginAndNavigate(fullUrl, username, password, profile);
+                                    MobileApp.loginAndNavigate(fullUrl, username, password);
 
                                     MobileApp.init();
 
@@ -438,7 +438,7 @@ var MobileApp = {
                     var username = MobileApp.getUsername(profile);
                     var password = MobileApp.getPassword(profile);
                     // login and navigate to URL
-                    MobileApp.loginAndNavigate(url, username, password, profile);
+                    MobileApp.loginAndNavigate(url, username, password);
                     login = true;
                     break;
                 }
@@ -451,7 +451,7 @@ var MobileApp = {
         }
     },
 
-    loginAndNavigate: function(url, username, password, profile) {
+    loginAndNavigate: function(url, username, password) {
         var parser = document.createElement('a');
         parser.href = url;
         var hostUri = parser.protocol + "//" + parser.host;
@@ -463,6 +463,9 @@ var MobileApp = {
         newUrl += "_cordova=true";
 
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
+        if (url.indexOf("/web/userview/") > 0) {
+            loginPageUrl = url.replace('userview','ulogin');
+        }
         MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password);
     },
 
@@ -473,7 +476,7 @@ var MobileApp = {
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
-        if (loginUrl) {
+        if (loginUrl) {   
             // perform login
             var callback = function () {
                 var loginScript = " \
