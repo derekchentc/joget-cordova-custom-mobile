@@ -462,19 +462,20 @@ var MobileApp = {
         newUrl += (search) ? "&" : "?";
         newUrl += "_cordova=true";
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
+        var initialUrl = hostUri + "/jw/web/mobile?_cordova=true";
         if (newUrl.indexOf("/web/userview/") > 0) {
-            loginPageUrl = url.replace('userview','ulogin');
+            initialUrl = url.replace('userview','ulogin');
         }
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password, initialUrl);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl, username, password) {
+    showFrame: function(url, loginUrl, credentials, loginPageUrl, username, password, initialUrl) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(initialUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {   
             // perform login
             var callback = function () {
@@ -488,7 +489,7 @@ var MobileApp = {
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
-                                redirectURL = ''; \
+                                redirectURL = '" + loginPageUrl + "'; \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
