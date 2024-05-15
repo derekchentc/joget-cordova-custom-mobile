@@ -488,7 +488,7 @@ var MobileApp = {
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
-                                redirectURL = '" + loginPageUrl + "'; \
+                                redirectURL = ''; \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
