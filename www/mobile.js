@@ -462,53 +462,68 @@ var MobileApp = {
         newUrl += (search) ? "&" : "?";
         newUrl += "_cordova=true";
         var loginPageUrl = hostUri + "/jw/web/mobile";
-        var initialUrl = hostUri + "/jw/web/mobile";
-        if (url.indexOf("/web/userview/") > 0) {
-            initialUrl = url.replace('userview','ulogin');
-        }
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password, initialUrl);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl, username, password, initialUrl) {
+    showFrame: function(url, loginUrl, credentials, loginPageUrl, username, password) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         console.log('initialUrl: ' + initialUrl);
-        MobileApp.inAppBrowser = inAppBrowser.open(initialUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {   
             // perform login
             var callback = function () {
                 var loginScript = " \
-                    try { \
-                        var xhttp = new XMLHttpRequest(); \
-                        xhttp.onreadystatechange = function() { \
-                            if (this.readyState == 4) { \
-                                console.log('login done'); \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                console.log('responseHTML: ' + this.responseText); \
-                                var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
-                                var loginForm = responseHTML.querySelector('form#loginForm'); \
-                                if (profileLink || loginForm) {\
-                                    window.location.href='" + loginPageUrl + "'; \
-                                }\ else {\
-                                    window.location.href='" + initialUrl + "'; \
-                                }\
-                                var data = {'action': 'show', 'message': 'true'}; \
-                                var json = JSON.stringify(data); \
-                                window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
+                try { \
+                    var xhttp = new XMLHttpRequest(); \
+                    xhttp.onreadystatechange = function() { \
+                        if (this.readyState == 4) { \
+                            var redirectURL = '" + url + "'; \
+                            console.log('redirectURL: ' + redirectURL); \
+                            var parser = new DOMParser(); \
+                            var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                            console.log('responseHTML: ' + this.responseText); \
+                            var profileLink = responseHTML.querySelector('.mm-profile.user-link > a:not(.dropdown)'); \
+                            var loginForm = responseHTML.querySelector('form#loginForm'); \
+                            if (profileLink || loginForm) { \
+                                redirectURL = '" + loginPageUrl + "'; \
+                                console.log('redirectURL2: ' + redirectURL); \
+                                var scripts = responseHTML.getElementsByTagName('script'); \
+                                for (var i = 0; i < scripts.length; i++) { \
+                                    var innerText = scripts[i].innerHTML; \
+                                    if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
+                                        redirectURL = '';  \
+                                        document.getElementById('j_username').value = '" + username + "'; \
+                                        document.getElementById('j_password').value = '" + password + "'; \
+                                        var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
+                                        if (loginButton) { \
+                                            loginButton.click(); \
+                                        }\
+                                    } \
+                                } \
                             } \
-                        }; \
-                        xhttp.open('POST', '" + loginUrl + "', false); \
-                        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
-                        console.log('logging in'); \
-                        xhttp.send('" + credentials + "'); \
-                        document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
-                    } catch(e) { \
-                        console.log(e); \
-                    } ";
+                            if (redirectURL) { \
+                                console.log('currentURL: ' + redirectURL); \
+                                window.location.href = redirectURL; \
+                            } \
+                            var data = {'action': 'show', 'message': 'true'}; \
+                            var json = JSON.stringify(data); \
+                            window.onload = function() { \
+                                webkit.messageHandlers.cordova_iab.postMessage(json); \
+                            }; \
+                        } \
+                    }; \
+                    xhttp.open('POST', '" + loginUrl + "', false); \
+                    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); \
+                    console.log('logging in'); \
+                    xhttp.send('" + credentials + "'); \
+                    document.body.innerHTML = '<div style=\"margin-left:45%;margin-top:10%\"><img src=\"/jw/xadmin/lib/layui/css/modules/layer/default/loading-0.gif\"></div>'; \
+                } catch(e) { \
+                    console.log(e); \
+                }";
                 if (MobileApp.inAppBrowser.executeScript) {
                     // InAppBrowser detected, use executeScript to insert code
                     try {
