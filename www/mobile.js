@@ -464,7 +464,7 @@ var MobileApp = {
         var loginPageUrl = hostUri + "/jw/web/mobile?_cordova=true";
         var initialUrl = hostUri + "/jw/web/mobile?_cordova=true";
         if (newUrl.indexOf("/web/userview/") > 0) {
-            initialUrl = url.replace('userview','ulogin');
+            initialUrl = newUrl.replace('userview','ulogin');
         }
         MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password, initialUrl);
     },
@@ -475,7 +475,8 @@ var MobileApp = {
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(loginPageUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        console.log('initialUrl: ' + initialUrl);
+        MobileApp.inAppBrowser = inAppBrowser.open(initialUrl, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
         if (loginUrl) {   
             // perform login
             var callback = function () {
@@ -491,7 +492,7 @@ var MobileApp = {
                             console.log('responseHTML: ' + this.responseText); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
-                                redirectURL = '" + initialUrl + "?login_error=1'; \
+                                redirectURL = '" + loginPageUrl + "?login_error=1'; \
                                 console.log('redirectURL2: ' + redirectURL); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
