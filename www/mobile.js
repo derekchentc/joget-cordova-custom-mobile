@@ -484,38 +484,28 @@ var MobileApp = {
                     var xhttp = new XMLHttpRequest(); \
                     xhttp.onreadystatechange = function() { \
                         if (this.readyState == 4) { \
-                            console.log('login done'); \
-                            console.log('current url: ' + window.location.href); \
                             var redirectURL = '" + url + "'; \
                             var parser = new DOMParser(); \
                             var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                             var metaRefresh = responseHTML.querySelector('meta[http-equiv=\"REFRESH\"]'); \
                             if (!metaRefresh) { \
                                 redirectURL = '" + loginPageUrl + "'; \
-                                console.log('Failed Login'); \
                                 var scripts = responseHTML.getElementsByTagName('script'); \
                                 for (var i = 0; i < scripts.length; i++) { \
                                     var innerText = scripts[i].innerHTML; \
                                     if (innerText.includes('new PopupDialog') && innerText.includes('org.joget.plugin.directory.TotpMfaAuthenticator')) { \
                                         redirectURL = '';  \
-                                        console.log('Element found:'); \
                                         document.getElementById('j_username').value = '" + username + "'; \
                                         document.getElementById('j_password').value = '" + password + "'; \
                                         var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
                                         if (loginButton) { \
                                             loginButton.click(); \
-                                            console.log('Button clicked'); \
-                                        } else { \
-                                            console.log('Button not found'); \
-                                        } \
+                                        }\
                                     } \
                                 } \
                             } \
                             if (redirectURL) { \
-                                console.log('Do redirect'); \
                                 window.location.href = redirectURL; \
-                            } else { \
-                                console.log('No redirect'); \
                             } \
                             var data = {'action': 'show', 'message': 'true'}; \
                             var json = JSON.stringify(data); \
