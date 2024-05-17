@@ -45,6 +45,12 @@ var MobilePush = {
                 permissions.requestPermission(permissions.POST_NOTIFICATIONS);
             }
         });
+
+        permissions.hasPermission(permissions.CAMERA, function( status ){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.CAMERA);
+            }
+        });
     },
     
     registerDevice: function() {
