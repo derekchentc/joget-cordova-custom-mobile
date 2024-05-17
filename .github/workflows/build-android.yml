@@ -73,7 +73,7 @@ jobs:
         run: cordova plugin add cordova-plugin-fingerprint-aio@5.0.1
 
       - name: Add cordova-plugin-camera
-        run: cordova plugin add cordova-plugin-camera@7.0.0
+        run: cordova plugin add cordova-plugin-camera@6.0.0
 
       - name: Add cordova-plugin-android-permissions
         run: cordova plugin add cordova-plugin-android-permissions@1.1.5
