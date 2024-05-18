@@ -459,6 +459,7 @@ var MobileApp = {
         var loginUrl = hostUri + "/jw/j_spring_security_check";    
         var credentials = "j_username=" + encodeURIComponent(username) + "&j_password=" + encodeURIComponent(password);
         var newUrl = url;
+        var loginPageUrl = hostUri + "/jw/web/mobile";
         if (newUrl.indexOf("/web/userview/") > 0) {
             newUrl = newUrl.replace('userview','ulogin');
         } else {
@@ -466,10 +467,10 @@ var MobileApp = {
             newUrl += "_cordova=true";
         }
 
-        MobileApp.showFrame(newUrl, loginUrl, credentials);
+        MobileApp.showFrame(newUrl, loginUrl, credentials, username, password);
     },
 
-    showFrame: function(url, loginUrl, credentials) {
+    showFrame: function(url, loginUrl, credentials, username, password) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
@@ -485,7 +486,23 @@ var MobileApp = {
                         xhttp.onreadystatechange = function() { \
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
-                                window.location.href='" + url + "'; \
+                                var redirectURL = '" + url + "'; \
+                                var parser = new DOMParser(); \
+                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
+                                var loginForm = responseHTML.querySelector('form#loginForm'); \
+                                if (loginForm) { \
+                                    redirectURL = '';  \
+                                    document.getElementById('j_username').value = '" + username + "'; \
+                                    document.getElementById('j_password').value = '" + password + "'; \
+                                    var loginButton = document.querySelector('body#login #loginForm table td input[type=\"submit\"]'); \
+                                    if (loginButton) { \
+                                        loginButton.click(); \
+                                    }\
+                                } \
+                                if (redirectURL) { \
+                                    console.log('currentURL: ' + redirectURL); \
+                                    window.location.href = redirectURL; \
+                                } \
                                 var data = {'action': 'show', 'message': 'true'}; \
                                 var json = JSON.stringify(data); \
                                 window.onload=function(){webkit.messageHandlers.cordova_iab.postMessage(json);}; \
