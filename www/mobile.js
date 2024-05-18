@@ -460,16 +460,16 @@ var MobileApp = {
         var credentials = "j_username=" + encodeURIComponent(username) + "&j_password=" + encodeURIComponent(password);
         var newUrl = url;
         if (newUrl.indexOf("/web/userview/") > 0) {
-            newUrl = url.replace('userview','ulogin');
+            newUrl = newUrl.replace('userview','ulogin');
         } else {
             newUrl += (search) ? "&" : "?";
             newUrl += "_cordova=true";
         }
 
-        MobileApp.showFrame(newUrl, loginUrl, credentials, loginPageUrl, username, password);
+        MobileApp.showFrame(newUrl, loginUrl, credentials);
     },
 
-    showFrame: function(url, loginUrl, credentials, loginPageUrl, username, password) {
+    showFrame: function(url, loginUrl, credentials) {
         // implementation using InAppBrowser plugin https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/
         // use InAppBrowser.executeScript method because session cookies are not passed over to the webview
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
@@ -613,10 +613,6 @@ var MobileApp = {
             navigator.geolocation.getCurrentPosition(function(position) { console.log(position) });
             console.log("Geolocation initialized");
         }
-    },
-
-    runScript: function(script) {
-        console.log('Running script:' + script);
     },
 
     closeFrame: function() {
