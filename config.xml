@@ -72,7 +72,7 @@
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
             <uses-permission android:name="android.permission.FLASHLIGHT" />
             <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-            <uses-feature android:name="android.hardware.camera" android:required="true" />
+            <uses-feature android:name="android.hardware.microphone"/>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <provider
