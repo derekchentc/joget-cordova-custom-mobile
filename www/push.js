@@ -40,36 +40,29 @@ var MobilePush = {
         });
 
         var permissions = cordova.plugins.permissions;
-        permissions.hasPermission(permissions.POST_NOTIFICATIONS, function( status ){
+        permissions.hasPermission(permissions.POST_NOTIFICATIONS, function(status){
             if (!status.hasPermission) {
                 permissions.requestPermission(permissions.POST_NOTIFICATIONS);
             }
         });
 
-        permissions.hasPermission(permissions.CAMERA, function(status) {
+        permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function(status){
             if (!status.hasPermission) {
-                // Camera permission has not been granted, request it
-                permissions.requestPermission(permissions.CAMERA, function(status) {
-                    if (status.hasPermission) {
-                        // Camera permission has been granted, proceed with accessing the camera
-                        accessCamera();
-                    } else {
-                        // Camera permission was denied, handle accordingly
-                        console.error('Camera permission denied');
-                    }
-                }, function() {
-                    // Error handling for permission request
-                    console.error('Error requesting camera permission');
-                });
-            } else {
-                // Camera permission has already been granted, proceed with accessing the camera
-                accessCamera();
+                permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE);
             }
         });
 
-        function accessCamera() {
-            alert('can access now');
-        }
+        permissions.hasPermission(permissions.CAMERA, function(status){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.CAMERA);
+            }
+        });
+
+        permissions.hasPermission(permissions.ACCESS_FINE_LOCATION, function(status){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.ACCESS_FINE_LOCATION);
+            }
+        });
     },
     
     registerDevice: function() {
