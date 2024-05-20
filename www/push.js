@@ -46,11 +46,30 @@ var MobilePush = {
             }
         });
 
-        permissions.hasPermission(permissions.CAMERA, function( status ){
+        permissions.hasPermission(permissions.CAMERA, function(status) {
             if (!status.hasPermission) {
-                permissions.requestPermission(permissions.CAMERA);
+                // Camera permission has not been granted, request it
+                permissions.requestPermission(permissions.CAMERA, function(status) {
+                    if (status.hasPermission) {
+                        // Camera permission has been granted, proceed with accessing the camera
+                        accessCamera();
+                    } else {
+                        // Camera permission was denied, handle accordingly
+                        console.error('Camera permission denied');
+                    }
+                }, function() {
+                    // Error handling for permission request
+                    console.error('Error requesting camera permission');
+                });
+            } else {
+                // Camera permission has already been granted, proceed with accessing the camera
+                accessCamera();
             }
         });
+
+        function accessCamera() {
+            alert('can access now');
+        }
     },
     
     registerDevice: function() {
