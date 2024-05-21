@@ -937,12 +937,17 @@ public class InAppBrowser extends CordovaPlugin {
                     // CUSTOM: Support camera or file chooser
                     // For Android 5.0+
                     // Grant permissions for cam
-                 @Override
-                public void onPermissionRequest(final PermissionRequest request) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        request.grant(request.getResources());
+                    @Override
+                    public void onPermissionRequest(final PermissionRequest request) {
+                        if (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                        cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            // Request permissions
+                            cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+                        } else {
+                            // Permissions already granted
+                            request.grant(request.getResources());
+                        }
                     }
-                }
             
                     public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                         if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
