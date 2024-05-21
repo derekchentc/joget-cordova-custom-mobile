@@ -634,29 +634,6 @@ public class InAppBrowser extends CordovaPlugin {
         return this;
     }
 
-    // Handle the permission request result
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        LOG.d(LOG_TAG, "onRequestPermissionsResult_+_+_+_+_+_+_++++++++++++++++++++++++++++++++++++++++___________________");
-        if (requestCode == 1) {
-            boolean allGranted = true;
-            for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allGranted = false;
-                    break;
-                }
-            }
-        
-            if (allGranted && pendingPermissionRequest != null) {
-                // All requested permissions are granted, proceed with the original request
-                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                pendingPermissionRequest = null;
-            } else {
-                // Permissions denied, you might want to handle this case
-            }
-        }
-    }
-
     /**
      * Display a new browser with the specified URL.
      *
@@ -1154,8 +1131,9 @@ public class InAppBrowser extends CordovaPlugin {
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
 
-    // CUSTOM: File download support
+    // CUSTOM: File download support onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        LOG.d(LOG_TAG, "onRequestPermissionsResult_+_+_+_+_+_+_++++++++++++++++++++++++++++++++++++++++___________________");
         if (InAppBrowser.this.downloads != null) {
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
         }
