@@ -949,9 +949,7 @@ public class InAppBrowser extends CordovaPlugin {
                         }
                     }
 
-                    @Override
                     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-                        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                         if (requestCode == 1) {
                             for (int i = 0; i < permissions.length; i++) {
                                 String permission = permissions[i];
