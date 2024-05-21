@@ -61,6 +61,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.webkit.PermissionRequest;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
@@ -936,24 +937,12 @@ public class InAppBrowser extends CordovaPlugin {
                     // CUSTOM: Support camera or file chooser
                     // For Android 5.0+
                     // Grant permissions for cam
-                @Override
-        public void onPermissionRequest(final PermissionRequest request) {
-            Log.d(LOG_TAG, "onPermissionRequest");
-            MainActivity.this.runOnUiThread(new Runnable() {
-                @TargetApi(Build.VERSION_CODES.M)
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, request.getOrigin().toString());
-                    if (request.getOrigin().toString().equals("file:///")) {
-                        Log.d(LOG_TAG, "GRANTED");
+                 @Override
+                public void onPermissionRequest(final PermissionRequest request) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         request.grant(request.getResources());
-                    } else {
-                        Log.d(LOG_TAG, "DENIED");
-                        request.deny();
                     }
                 }
-            });
-        }
             
                     public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                         if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
