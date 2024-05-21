@@ -938,17 +938,17 @@ public class InAppBrowser extends CordovaPlugin {
                     // Grant permissions for cam
                 @Override
         public void onPermissionRequest(final PermissionRequest request) {
-            Log.d(TAG, "onPermissionRequest");
+            Log.d(LOG_TAG, "onPermissionRequest");
             MainActivity.this.runOnUiThread(new Runnable() {
                 @TargetApi(Build.VERSION_CODES.M)
                 @Override
                 public void run() {
-                    Log.d(TAG, request.getOrigin().toString());
+                    Log.d(LOG_TAG, request.getOrigin().toString());
                     if (request.getOrigin().toString().equals("file:///")) {
-                        Log.d(TAG, "GRANTED");
+                        Log.d(LOG_TAG, "GRANTED");
                         request.grant(request.getResources());
                     } else {
-                        Log.d(TAG, "DENIED");
+                        Log.d(LOG_TAG, "DENIED");
                         request.deny();
                     }
                 }
