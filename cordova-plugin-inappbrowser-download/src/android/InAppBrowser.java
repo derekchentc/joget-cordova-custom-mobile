@@ -637,6 +637,7 @@ public class InAppBrowser extends CordovaPlugin {
     // Handle the permission request result
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        LOG.d(LOG_TAG, "onRequestPermissionsResult_+_+_+_+_+_+_++++++++++++++++++++++++++++++++++++++++___________________");
         if (requestCode == 1) {
             boolean allGranted = true;
             for (int result : grantResults) {
@@ -965,6 +966,7 @@ public class InAppBrowser extends CordovaPlugin {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
                                 cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+                                LOG.d(LOG_TAG, "Requesting permission_+_+_+_+_+_+_++++++++++++++++++++++++++++++++++++++++___________________");
                                 pendingPermissionRequest = request;
                             } else {
                                 // Permissions are already granted, proceed
