@@ -45,6 +45,24 @@ var MobilePush = {
                 permissions.requestPermission(permissions.POST_NOTIFICATIONS);
             }
         });
+
+        permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function(status){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE);
+            }
+        });
+
+        permissions.hasPermission(permissions.CAMERA, function(status){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.CAMERA);
+            }
+        });
+
+        permissions.hasPermission(permissions.ACCESS_FINE_LOCATION, function(status){
+            if (!status.hasPermission) {
+                permissions.requestPermission(permissions.ACCESS_FINE_LOCATION);
+            }
+        });
     },
     
     registerDevice: function() {
