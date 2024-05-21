@@ -939,28 +939,12 @@ public class InAppBrowser extends CordovaPlugin {
                     // Grant permissions for cam
                     @Override
                     public void onPermissionRequest(final PermissionRequest request) {
-                        if (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                        cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            // Request permissions
+                        if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
                             cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
-                        } else {
-                            // Permissions already granted
-                            request.grant(request.getResources());
                         }
-                    }
-
-                    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-                        if (requestCode == 1) {
-                            for (int i = 0; i < permissions.length; i++) {
-                                String permission = permissions[i];
-                                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                                    // Permission granted, grant the request
-                                    inAppWebView.loadUrl(url);
-                                } else {
-                                    // Permission denied, handle accordingly
-                                    // You might want to show a message or take other actions
-                                }
-                            }
+                        
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            request.grant(request.getResources());
                         }
                     }
             
