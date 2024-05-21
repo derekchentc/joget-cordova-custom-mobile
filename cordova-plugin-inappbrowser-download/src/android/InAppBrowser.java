@@ -163,6 +163,7 @@ public class InAppBrowser extends CordovaPlugin {
     private String[] allowedSchemes;
     private InAppBrowserClient currentClient;
     private String mCM;
+    private PermissionRequest pendingPermissionRequest;
 
     /**
      * Executes the request and returns PluginResult.
@@ -633,6 +634,28 @@ public class InAppBrowser extends CordovaPlugin {
         return this;
     }
 
+    // Handle the permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+        
+            if (allGranted && pendingPermissionRequest != null) {
+                // All requested permissions are granted, proceed with the original request
+                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                pendingPermissionRequest = null;
+            } else {
+                // Permissions denied, you might want to handle this case
+            }
+        }
+    }
+
     /**
      * Display a new browser with the specified URL.
      *
@@ -937,39 +960,15 @@ public class InAppBrowser extends CordovaPlugin {
                     // CUSTOM: Support camera or file chooser
                     // For Android 5.0+
                     // Grant permissions for cam
-
-                    private PermissionRequest pendingPermissionRequest;
-
                     @Override
                     public void onPermissionRequest(final PermissionRequest request) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
                                 cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+                                pendingPermissionRequest = request;
                             } else {
                                 // Permissions are already granted, proceed
                                 request.grant(request.getResources());
-                            }
-                        }
-                    }
-
-                    // Handle the permission request result
-                    @Override
-                    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-                        if (requestCode == 1) {
-                            boolean allGranted = true;
-                            for (int result : grantResults) {
-                                if (result != PackageManager.PERMISSION_GRANTED) {
-                                    allGranted = false;
-                                    break;
-                                }
-                            }
-        
-                            if (allGranted && pendingPermissionRequest != null) {
-                                // All requested permissions are granted, proceed with the original request
-                                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                                pendingPermissionRequest = null;
-                            } else {
-                                // Permissions denied, you might want to handle this case
                             }
                         }
                     }
