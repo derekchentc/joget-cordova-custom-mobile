@@ -957,7 +957,7 @@ public class InAppBrowser extends CordovaPlugin {
                                 String permission = permissions[i];
                                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                                     // Permission granted, grant the request
-                                    request.grant(request.getResources());
+                                    inAppWebView.loadUrl(url);
                                 } else {
                                     // Permission denied, handle accordingly
                                     // You might want to show a message or take other actions
