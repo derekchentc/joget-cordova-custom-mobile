@@ -948,6 +948,23 @@ public class InAppBrowser extends CordovaPlugin {
                             request.grant(request.getResources());
                         }
                     }
+
+                    @Override
+                    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                        if (requestCode == 1) {
+                            for (int i = 0; i < permissions.length; i++) {
+                                String permission = permissions[i];
+                                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                    // Permission granted, grant the request
+                                    request.grant(request.getResources());
+                                } else {
+                                    // Permission denied, handle accordingly
+                                    // You might want to show a message or take other actions
+                                }
+                            }
+                        }
+                    }
             
                     public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                         if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
