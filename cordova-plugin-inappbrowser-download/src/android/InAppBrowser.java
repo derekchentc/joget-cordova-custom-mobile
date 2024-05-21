@@ -939,50 +939,40 @@ public class InAppBrowser extends CordovaPlugin {
                     // Grant permissions for cam
 
                     private PermissionRequest pendingPermissionRequest;
-                    
+
                     @Override
                     public void onPermissionRequest(final PermissionRequest request) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        Activity activity = cordova.getActivity();
-        boolean cameraPermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-        boolean storagePermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                                cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+                            } else {
+                                // Permissions are already granted, proceed
+                                request.grant(request.getResources());
+                            }
+                        }
+                    }
 
-        if (!cameraPermission || !storagePermission) {
-            ActivityCompat.requestPermissions(activity, new String[]{
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, 1);
-
-            // Store the request to be processed later
-            pendingPermissionRequest = request;
-        } else {
-            // Permissions are already granted, proceed
-            request.grant(request.getResources());
-        }
-    }
-}
-
-// Handle the permission request result
-@Override
-public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-    if (requestCode == 1) {
-        boolean allGranted = true;
-        for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                allGranted = false;
-                break;
-            }
-        }
+                    // Handle the permission request result
+                    @Override
+                    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                        if (requestCode == 1) {
+                            boolean allGranted = true;
+                            for (int result : grantResults) {
+                                if (result != PackageManager.PERMISSION_GRANTED) {
+                                    allGranted = false;
+                                    break;
+                                }
+                            }
         
-        if (allGranted && pendingPermissionRequest != null) {
-            // All requested permissions are granted, proceed with the original request
-            pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-            pendingPermissionRequest = null;
-        } else {
-            // Permissions denied, you might want to handle this case
-        }
-    }
-}
+                            if (allGranted && pendingPermissionRequest != null) {
+                                // All requested permissions are granted, proceed with the original request
+                                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                                pendingPermissionRequest = null;
+                            } else {
+                                // Permissions denied, you might want to handle this case
+                            }
+                        }
+                    }
             
                     public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                         if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
