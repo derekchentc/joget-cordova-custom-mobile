@@ -72,7 +72,7 @@ public class InAppBrowserDownloads implements DownloadListener {
 
     public void onRequestPermissionResult(int requestCode, String[] permissions,
             int[] grantResults) throws JSONException {
-                 LOG.d(LOG_TAG, "onRequestPermissionsResult___________________333");
+            System.out.println(LOG_TAG, "onRequestPermissionsResult___________________333");
         for (int r : grantResults) {
             if (r == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(plugin.cordova.getActivity().getApplicationContext(),
