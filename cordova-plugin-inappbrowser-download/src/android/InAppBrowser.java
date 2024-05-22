@@ -1139,29 +1139,20 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
     // END CUSTOM
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         LOG.d(LOG_TAG, "onRequestPermissionsResult");
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            boolean allPermissionsGranted = true;
-            for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allPermissionsGranted = false;
-                    break;
-                }
-            }
-            if (allPermissionsGranted) {
-                if (pendingPermissionRequest != null) {
-                    pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                    pendingPermissionRequest = null;
-                }
+        if (this.cordova != null && this.cordova.getActivity() != null) {
+            this.cordova.onRequestPermissionResult(requestCode, permissions, grantResults);
+        }
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                pendingPermissionRequest = null;
             } else {
-                if (pendingPermissionRequest != null) {
-                    pendingPermissionRequest.deny();
-                    pendingPermissionRequest = null;
-                }
+                // Permission denied
+                pendingPermissionRequest.deny();
+                pendingPermissionRequest = null;
             }
         }
     }
