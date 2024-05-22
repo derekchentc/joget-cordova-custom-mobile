@@ -1141,9 +1141,9 @@ public class InAppBrowser extends CordovaPlugin {
     // END CUSTOM
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         LOG.d(LOG_TAG, "onRequestPermissionsResult");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             boolean allPermissionsGranted = true;
             for (int result : grantResults) {
