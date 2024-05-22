@@ -370,6 +370,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onPause(boolean multitasking) {
+        LOG.d(LOG_TAG, "onPause123");
         if (shouldPauseInAppBrowser) {
             inAppWebView.onPause();
         }
@@ -380,6 +381,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
+        LOG.d(LOG_TAG, "onResume123");
         if (shouldPauseInAppBrowser) {
             inAppWebView.onResume();
         }
@@ -391,28 +393,6 @@ public class InAppBrowser extends CordovaPlugin {
      */
     public void onDestroy() {
         closeDialog();
-    }
-
-    /**
-     * Called by the system when the user grants permissions
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        LOG.d(LOG_TAG, "onRequestPermissionsResult");
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                pendingPermissionRequest = null;
-            } else {
-                // Permission denied
-                pendingPermissionRequest.deny();
-                pendingPermissionRequest = null;
-            }
-        }
     }
 
     /**
@@ -1027,6 +1007,23 @@ public class InAppBrowser extends CordovaPlugin {
                         cordova.startActivityForResult(InAppBrowser.this, chooserIntent, FILECHOOSER_REQUESTCODE);
 
                         return true;
+                    }
+
+                    /**
+                    * Called by the system when the user grants permissions
+                    */
+                    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+                        LOG.d(LOG_TAG, "onRequestPermissionsResult");
+                        if (requestCode == CAMERA_REQUEST_CODE) {
+                            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                                pendingPermissionRequest = null;
+                            } else {
+                                // Permission denied
+                                pendingPermissionRequest.deny();
+                                pendingPermissionRequest = null;
+                            }
+                        }
                     }
                 });
                 currentClient = new InAppBrowserClient(thatWebView, edittext, beforeload);
