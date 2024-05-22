@@ -164,6 +164,7 @@ public class InAppBrowser extends CordovaPlugin {
     private InAppBrowserClient currentClient;
     private String mCM;
     private PermissionRequest pendingPermissionRequest;
+    private static final int CAMERA_REQUEST_CODE = 123;
 
     /**
      * Executes the request and returns PluginResult.
@@ -390,6 +391,32 @@ public class InAppBrowser extends CordovaPlugin {
      */
     public void onDestroy() {
         closeDialog();
+    }
+
+    /**
+     * Called by the system when the user grants permissions
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        LOG.d(LOG_TAG, "onRequestPermissionsResult");
+        if (this.cordova != null && this.cordova.getActivity() != null) {
+            this.cordova.onRequestPermissionResult(requestCode, permissions, grantResults);
+        }
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                pendingPermissionRequest = null;
+            } else {
+                // Permission denied
+                pendingPermissionRequest.deny();
+                pendingPermissionRequest = null;
+            }
+        }
     }
 
     /**
@@ -1139,23 +1166,6 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
     // END CUSTOM
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        LOG.d(LOG_TAG, "onRequestPermissionsResult");
-        if (this.cordova != null && this.cordova.getActivity() != null) {
-            this.cordova.onRequestPermissionResult(requestCode, permissions, grantResults);
-        }
-
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                pendingPermissionRequest = null;
-            } else {
-                // Permission denied
-                pendingPermissionRequest.deny();
-                pendingPermissionRequest = null;
-            }
-        }
-    }
 
     /**
      * Create a new plugin success result and send it back to JavaScript
