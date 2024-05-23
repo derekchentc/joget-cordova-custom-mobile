@@ -940,21 +940,6 @@ public class InAppBrowser extends CordovaPlugin {
                 inAppWebView.setWebChromeClient(new InAppChromeClient(thatWebView) {
                     // CUSTOM: Support camera or file chooser
                     // For Android 5.0+
-                    // Grant permissions for cam
-                    @Override
-                    public void onPermissionRequest(final PermissionRequest request) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                                cordova.requestPermissions(InAppBrowser.this, CAMERA_REQ_CODE, new String[]{Manifest.permission.CAMERA});
-                                LOG.d(LOG_TAG, "Requesting permission...");
-                                permissionRequest = request;
-                            } else {
-                                // Permissions are already granted, proceed
-                                request.grant(request.getResources());
-                            }
-                        }
-                    }
-            
                     public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                         if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
                             cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
@@ -1007,6 +992,18 @@ public class InAppBrowser extends CordovaPlugin {
                         cordova.startActivityForResult(InAppBrowser.this, chooserIntent, FILECHOOSER_REQUESTCODE);
 
                         return true;
+                    }
+
+                    // Grant permissions for camera
+                    @Override
+                    public void onPermissionRequest(final PermissionRequest request) {
+                        if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                            cordova.requestPermissions(InAppBrowser.this, CAMERA_REQ_CODE, new String[]{Manifest.permission.CAMERA});
+                            permissionRequest = request;
+                        } else {
+                            // Permissions are already granted, proceed
+                            request.grant(request.getResources());
+                        }
                     }
                 });
                 currentClient = new InAppBrowserClient(thatWebView, edittext, beforeload);
@@ -1134,13 +1131,11 @@ public class InAppBrowser extends CordovaPlugin {
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
 
-    // CUSTOM: File download support onRequestPermissionsResult
+    // CUSTOM: File download support & camera grant resources onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         if (InAppBrowser.this.downloads != null && permissionRequest == null) {
-            LOG.d(LOG_TAG, "Download permissions");
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
         } else {
-            LOG.d(LOG_TAG, "Cameara permissions");
             if (requestCode == CAMERA_REQ_CODE) {
                 boolean permissionsGranted = true;
                 for (int result : grantResults) {
