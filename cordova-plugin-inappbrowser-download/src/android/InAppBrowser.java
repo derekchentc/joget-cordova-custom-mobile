@@ -165,6 +165,7 @@ public class InAppBrowser extends CordovaPlugin {
     private String mCM;
     private PermissionRequest pendingPermissionRequest;
     private static final int CAMERA_REQUEST_CODE = 123;
+    private static final int CAMERA_REQ_CODE = 124;
     private static final int CAMERA_AND_STORAGE_REQ_CODE = 101;
 
     /**
@@ -946,7 +947,7 @@ public class InAppBrowser extends CordovaPlugin {
                     public void onPermissionRequest(final PermissionRequest request) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                                cordova.requestPermissions(InAppBrowser.this, CAMERA_AND_STORAGE_REQ_CODE, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA});
+                                cordova.requestPermissions(InAppBrowser.this, CAMERA_REQ_CODE, new String[]{Manifest.permission.CAMERA});
                                 LOG.d(LOG_TAG, "Requesting permission...");
                                 pendingPermissionRequest = request;
                             } else {
@@ -1137,35 +1138,31 @@ public class InAppBrowser extends CordovaPlugin {
 
     // CUSTOM: File download support onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        LOG.d(LOG_TAG, "onRequestPermissionResult");
         for (int result2 : grantResults) {
-            LOG.d(LOG_TAG, String.valueOf(requestCode));
-            LOG.d(LOG_TAG, "Permission result: " + String.valueOf(result2));
+            LOG.d(LOG_TAG, String.valueOf(result2));
         }
         if (InAppBrowser.this.downloads != null && pendingPermissionRequest == null) {
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
         } else {
             if (requestCode == CAMERA_AND_STORAGE_REQ_CODE) {
-                LOG.d(LOG_TAG, "yes");
-                boolean allPermissionsGranted = true;
+                boolean permissionsGranted = true;
                 for (int result : grantResults) {
-                    LOG.d(LOG_TAG, String.valueOf(result));
                     if (result != PackageManager.PERMISSION_GRANTED) {
-                        allPermissionsGranted = false;
+                        permissionsGranted = false;
                     } else {
-                        allPermissionsGranted = true;
+                        permissionsGranted = true;
                     }
                 }
 
-                if (allPermissionsGranted) {
-                    // Both permissions granted
+                if (permissionsGranted) {
+                    // permissions granted
                     if (pendingPermissionRequest != null) {
                         pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
                         pendingPermissionRequest = null;
                     }
                     LOG.d(LOG_TAG, "Camera and Storage permissions granted");
                 } else {
-                    // One or both permissions denied
+                    //  permissions denied
                     if (pendingPermissionRequest != null) {
                         pendingPermissionRequest.deny();
                         pendingPermissionRequest = null;
