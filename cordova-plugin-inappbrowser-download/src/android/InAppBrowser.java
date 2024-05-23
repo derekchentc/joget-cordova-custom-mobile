@@ -165,7 +165,6 @@ public class InAppBrowser extends CordovaPlugin {
     private String mCM;
     private PermissionRequest permissionRequest;
     private static final int CAMERA_REQ_CODE = 124;
-    private static final int CAMERA_AND_STORAGE_REQ_CODE = 101;
 
     /**
      * Executes the request and returns PluginResult.
@@ -1138,8 +1137,10 @@ public class InAppBrowser extends CordovaPlugin {
     // CUSTOM: File download support onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         if (InAppBrowser.this.downloads != null && permissionRequest == null) {
+            LOG.d(LOG_TAG, "Download permissions");
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
         } else {
+            LOG.d(LOG_TAG, "Cameara permissions");
             if (requestCode == CAMERA_REQ_CODE) {
                 boolean permissionsGranted = true;
                 for (int result : grantResults) {
@@ -1151,18 +1152,14 @@ public class InAppBrowser extends CordovaPlugin {
 
                 if (permissionsGranted) {
                     // permissions granted
-                    if (permissionRequest != null) {
-                        permissionRequest.grant(permissionRequest.getResources());
-                        permissionRequest = null;
-                    }
-                    LOG.d(LOG_TAG, "Camera and Storage permissions granted");
+                    permissionRequest.grant(permissionRequest.getResources());
+                    permissionRequest = null;
+                    LOG.d(LOG_TAG, "Camera permissions granted");
                 } else {
                     //  permissions denied
-                    if (permissionRequest != null) {
-                        permissionRequest.deny();
-                        permissionRequest = null;
-                    }
-                    LOG.d(LOG_TAG, "Camera and/or Storage permission denied");
+                    permissionRequest.deny();
+                    permissionRequest = null;
+                    LOG.d(LOG_TAG, "Camera permission denied");
                 }
             }
         }
