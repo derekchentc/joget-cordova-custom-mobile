@@ -1138,8 +1138,35 @@ public class InAppBrowser extends CordovaPlugin {
     // CUSTOM: File download support onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         LOG.d(LOG_TAG, "onRequestPermissionResult");
-        if (InAppBrowser.this.downloads != null) {
+        if (InAppBrowser.this.downloads != null && pendingPermissionRequest == null) {
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
+        } else {
+            if (requestCode == CAMERA_AND_STORAGE_REQ_CODE) {
+                LOG.d(LOG_TAG, "yes");
+                boolean allPermissionsGranted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allPermissionsGranted = false;
+                        break;
+                    }
+                }
+
+                if (allPermissionsGranted) {
+                    // Both permissions granted
+                    if (pendingPermissionRequest != null) {
+                        pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
+                        pendingPermissionRequest = null;
+                    }
+                    LOG.d(LOG_TAG, "Camera and Storage permissions granted");
+                } else {
+                    // One or both permissions denied
+                    if (pendingPermissionRequest != null) {
+                        pendingPermissionRequest.deny();
+                        pendingPermissionRequest = null;
+                    }
+                    LOG.d(LOG_TAG, "Camera and/or Storage permission denied");
+                }
+            }
         }
     }
     // END CUSTOM
