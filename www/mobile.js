@@ -487,8 +487,6 @@ var MobileApp = {
                             if (this.readyState == 4) { \
                                 console.log('login done'); \
                                 var redirectURL = '" + url + "'; \
-                                var parser = new DOMParser(); \
-                                var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
                                 var loginForm = document.querySelector('form#loginForm'); \
                                 if (loginForm) { \
                                     redirectURL = '';  \
