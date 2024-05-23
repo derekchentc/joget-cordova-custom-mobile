@@ -1152,7 +1152,8 @@ public class InAppBrowser extends CordovaPlugin {
                     LOG.d(LOG_TAG, String.valueOf(result));
                     if (result != PackageManager.PERMISSION_GRANTED) {
                         allPermissionsGranted = false;
-                        break;
+                    } else {
+                        allPermissionsGranted = true;
                     }
                 }
 
