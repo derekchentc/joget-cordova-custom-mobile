@@ -1012,7 +1012,7 @@ public class InAppBrowser extends CordovaPlugin {
                     /**
                     * Called by the system when the user grants permissions
                     */
-                    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+                    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
                         LOG.d(LOG_TAG, "onRequestPermissionsResult");
                         if (requestCode == CAMERA_REQUEST_CODE) {
                             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
