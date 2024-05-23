@@ -165,6 +165,7 @@ public class InAppBrowser extends CordovaPlugin {
     private String mCM;
     private PermissionRequest pendingPermissionRequest;
     private static final int CAMERA_REQUEST_CODE = 123;
+    private static final int CAMERA_AND_STORAGE_REQ_CODE = 101;
 
     /**
      * Executes the request and returns PluginResult.
@@ -945,7 +946,7 @@ public class InAppBrowser extends CordovaPlugin {
                     public void onPermissionRequest(final PermissionRequest request) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             if(Build.VERSION.SDK_INT >=23 && (cordova.getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || cordova.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                                cordova.getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+                                cordova.requestPermissions(InAppBrowser.this, CAMERA_AND_STORAGE_REQ_CODE, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA});
                                 LOG.d(LOG_TAG, "Requesting permission...");
                                 pendingPermissionRequest = request;
                             } else {
@@ -1007,23 +1008,6 @@ public class InAppBrowser extends CordovaPlugin {
                         cordova.startActivityForResult(InAppBrowser.this, chooserIntent, FILECHOOSER_REQUESTCODE);
 
                         return true;
-                    }
-
-                    /**
-                    * Called by the system when the user grants permissions
-                    */
-                    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-                        LOG.d(LOG_TAG, "onRequestPermissionsResult");
-                        if (requestCode == CAMERA_REQUEST_CODE) {
-                            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                                pendingPermissionRequest.grant(pendingPermissionRequest.getResources());
-                                pendingPermissionRequest = null;
-                            } else {
-                                // Permission denied
-                                pendingPermissionRequest.deny();
-                                pendingPermissionRequest = null;
-                            }
-                        }
                     }
                 });
                 currentClient = new InAppBrowserClient(thatWebView, edittext, beforeload);
