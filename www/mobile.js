@@ -489,7 +489,7 @@ var MobileApp = {
                                 var redirectURL = '" + url + "'; \
                                 var parser = new DOMParser(); \
                                 var responseHTML = parser.parseFromString(this.responseText, 'text/html'); \
-                                var loginForm = responseHTML.querySelector('form#loginForm'); \
+                                var loginForm = document.querySelector('form#loginForm'); \
                                 if (loginForm) { \
                                     redirectURL = '';  \
                                     document.getElementById('j_username').value = '" + username + "'; \
