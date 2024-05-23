@@ -1138,6 +1138,10 @@ public class InAppBrowser extends CordovaPlugin {
     // CUSTOM: File download support onRequestPermissionsResult
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         LOG.d(LOG_TAG, "onRequestPermissionResult");
+        for (int result2 : grantResults) {
+            LOG.d(LOG_TAG, String.valueOf(requestCode));
+            LOG.d(LOG_TAG, "Permission result: " + String.valueOf(result2));
+        }
         if (InAppBrowser.this.downloads != null && pendingPermissionRequest == null) {
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
         } else {
