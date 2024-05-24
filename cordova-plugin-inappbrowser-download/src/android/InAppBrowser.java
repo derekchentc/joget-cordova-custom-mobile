@@ -370,7 +370,6 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onPause(boolean multitasking) {
-        LOG.d(LOG_TAG, "onPause123");
         if (shouldPauseInAppBrowser) {
             inAppWebView.onPause();
         }
@@ -381,7 +380,6 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
-        LOG.d(LOG_TAG, "onResume123");
         if (shouldPauseInAppBrowser) {
             inAppWebView.onResume();
         }
@@ -1135,28 +1133,26 @@ public class InAppBrowser extends CordovaPlugin {
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         if (InAppBrowser.this.downloads != null && permissionRequest == null) {
             InAppBrowser.this.downloads.onRequestPermissionResult(requestCode, permissions, grantResults);
-        } else {
-            if (requestCode == CAMERA_REQ_CODE) {
-                boolean permissionsGranted = true;
-                for (int result : grantResults) {
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        permissionsGranted = false;
-                        break; // Exit the loop if any permission is denied
-                    }
-                }
+            return;
+        } 
 
-                if (permissionsGranted) {
-                    // permissions granted
-                    permissionRequest.grant(permissionRequest.getResources());
-                    permissionRequest = null;
-                    LOG.d(LOG_TAG, "Camera permissions granted");
-                } else {
-                    //  permissions denied
-                    permissionRequest.deny();
-                    permissionRequest = null;
-                    LOG.d(LOG_TAG, "Camera permission denied");
+        if (requestCode == CAMERA_REQ_CODE && permissionRequest !=null) {
+            boolean permissionsGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    permissionsGranted = false;
+                    break;
                 }
             }
+
+            if (permissionsGranted) {
+                permissionRequest.grant(permissionRequest.getResources());
+                LOG.d(LOG_TAG, "Camera permissions granted");
+            } else {
+                permissionRequest.deny();
+                LOG.d(LOG_TAG, "Camera permission denied");
+            }
+            permissionRequest = null;
         }
     }
     // END CUSTOM

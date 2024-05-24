@@ -459,14 +459,12 @@ var MobileApp = {
         var loginUrl = hostUri + "/jw/j_spring_security_check";    
         var credentials = "j_username=" + encodeURIComponent(username) + "&j_password=" + encodeURIComponent(password);
         var newUrl = url;
-        var loginPageUrl = hostUri + "/jw/web/mobile";
         if (newUrl.indexOf("/web/userview/") > 0) {
             newUrl = newUrl.replace('userview','ulogin');
         } else {
             newUrl += (search) ? "&" : "?";
             newUrl += "_cordova=true";
         }
-
         MobileApp.showFrame(newUrl, loginUrl, credentials, username, password);
     },
 
@@ -500,7 +498,6 @@ var MobileApp = {
                                     }\
                                 } \
                                 if (redirectURL) { \
-                                    console.log('currentURL: ' + redirectURL); \
                                     window.location.href = redirectURL; \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
