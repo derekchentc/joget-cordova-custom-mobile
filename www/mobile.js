@@ -497,8 +497,8 @@ var MobileApp = {
                                         loginButton.click(); \
                                     }\
                                 } \
+                                alert(redirectURL);\
                                 if (redirectURL) { \
-                                    alert(redirectURL);\
                                     window.location.href = redirectURL; \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
