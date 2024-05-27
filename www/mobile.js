@@ -498,6 +498,7 @@ var MobileApp = {
                                     }\
                                 } \
                                 if (redirectURL) { \
+                                    alert(redirectURL)\
                                     window.location.href = redirectURL; \
                                 } \
                                 var data = {'action': 'show', 'message': 'true'}; \
