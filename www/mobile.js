@@ -496,10 +496,7 @@ var MobileApp = {
                                     if (loginButton) { \
                                         loginButton.click(); \
                                     }\
-                                } else {\
-                                    alert('not found');\
                                 }\
-                                alert(redirectURL);\
                                 if (redirectURL) { \
                                     window.location.href = redirectURL; \
                                 } \
