@@ -580,12 +580,13 @@ var MobileApp = {
             });
             console.log("Updated file download links");
 
-            //override logout link to close inappbrowser
-            MobileApp.inAppBrowser.executeScript({ code: '\
-                $("a[target$=/j_spring_security_logout]").on("click", function() {  \
-                    cordovaAction("close"); \
-                }); \
-            '
+            // Override logout link to close the in-app browser
+            MobileApp.inAppBrowser.executeScript({
+                code: '\
+                    $("a[href$=\'/j_spring_security_logout\']").on("click", function() {  \
+                        cordovaAction("close"); \
+                    }); \
+                '
             });
 
             if (MobileApp.floatingButton) {
