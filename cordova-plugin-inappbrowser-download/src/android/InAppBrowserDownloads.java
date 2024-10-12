@@ -97,9 +97,10 @@ public class InAppBrowserDownloads implements DownloadListener {
         }
         final String filename = tempfilename;
 
+        IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        plugin.cordova.getActivity().registerReceiver(attachmentDownloadCompleteReceive,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        plugin.cordova.getActivity().registerReceiver(attachmentDownloadCompleteReceive, intentFilter, Context.RECEIVER_EXPORTED);
 
         try {
             request.allowScanningByMediaScanner();
