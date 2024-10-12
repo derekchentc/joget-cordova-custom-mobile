@@ -100,7 +100,7 @@ public class InAppBrowserDownloads implements DownloadListener {
         IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        plugin.cordova.getActivity().registerReceiver(attachmentDownloadCompleteReceive, intentFilter, Context.RECEIVER_EXPORTED);
+        plugin.cordova.getActivity().registerReceiver(attachmentDownloadCompleteReceive, intentFilter, Context.RECEIVER_NOT_EXPORTED);
 
         try {
             request.allowScanningByMediaScanner();
