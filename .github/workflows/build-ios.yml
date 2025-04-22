@@ -101,7 +101,7 @@ jobs:
         run: cordova build ios --release
 
       - name: Upload Xcode workspace
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: xcworkspace
           path: platforms/ios/
@@ -112,7 +112,7 @@ jobs:
           cordova build ios --release --device --codeSignIdentity="Apple Distribution" --developmentTeam="$TEAM_ID" --packageType="app-store" --provisioningProfile="$PROVISIONING_PROFILE" --buildFlag="PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE" --buildFlag="CODE_SIGN_STYLE=Manual"
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-app-release
           path: platforms/ios/build/device/${{ env.IPA_FILE }}
