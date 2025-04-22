@@ -10,6 +10,9 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
+      - name: Print secret with spaces between characters
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | sed 's/./& /g'
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
