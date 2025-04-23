@@ -1183,6 +1183,7 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
 
+    // choose file from file chooser
     /**
      * Receive File Data from File Chooser
      *
