@@ -700,7 +700,7 @@ var MobileApp = {
                 // cp from above and modify
                 MobileApp.inAppBrowser.executeScript({
                     code: '\
-                    var logoutLink = document.querySelector("a[href=\'/jw/j_spring_security_logout\']"); \
+                    var logoutLink = document.querySelector("a[href$=\'/j_spring_security_logout\']"); \
                     if (logoutLink) { logoutLink.click(); console.log("Logout link clicked"); } \
                 '
                 });
@@ -709,8 +709,15 @@ var MobileApp = {
                 console.log("failed to inject logout click");
                 
             }finally{
-
-                MobileApp.inAppBrowser.close();
+                //set the delay
+                setTimeout(function() {
+                    try {
+                        MobileApp.inAppBrowser.close();
+                    } catch (e) {
+                        console.log("Error closing browser:", e);
+                    }
+                }, 1000);
+            
             }
 
             
