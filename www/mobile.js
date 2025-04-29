@@ -475,6 +475,23 @@ var MobileApp = {
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
         MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+       
+        // check the logout
+        MobileApp.logoutAlreadyTriggered = false;
+
+        MobileApp.inAppBrowser.addEventListener("exit", function () {
+            if (!MobileApp.logoutAlreadyTriggered) {
+                MobileApp.logoutAlreadyTriggered = true;
+        
+                try {
+                    var logoutUrl = "/jw/j_spring_security_logout";
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", logoutUrl, true);
+                    xhttp.send();
+                } catch (e) {
+                }
+            }
+        });
         if (loginUrl) {   
             // perform login
             var callback = function () {
@@ -537,21 +554,7 @@ var MobileApp = {
             MobileApp.inAppBrowser.addEventListener("load", callback);
         }
 
-        // Add exit event handler to catch when user presses the native X button
-        MobileApp.inAppBrowser.addEventListener("exit", function () {
-            console.log("InAppBrowser closed via native X button");
 
-            try {
-                MobileApp.inAppBrowser.executeScript({
-                    code: '\
-                            var logoutLink = document.querySelector("a[href$=\'/j_spring_security_logout\']"); \
-                            if (logoutLink) { logoutLink.click(); console.log("Logout link clicked"); } \
-                    '
-                });
-            } catch (e) {
-                console.log("Error injecting logout in exit:", e);
-            }
-        });
 
 
         // insert custom JavaScript codes into the InAppBrowser window once it stops loading
