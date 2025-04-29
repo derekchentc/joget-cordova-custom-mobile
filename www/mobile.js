@@ -690,8 +690,35 @@ var MobileApp = {
 
     cordovaAction: function(action, message, params) {
         console.log("action: " + params.data.action);
+        
         if (action === "close") {
-            MobileApp.inAppBrowser.close();
+            // call href="/jw/j_spring_security_logout" to logout
+            // get method
+            // use try-catch
+            // use xhttp
+
+            var logoutLink ="/jw/j_spring_security_logout";
+
+            try {
+                // cp from above and modify
+                MobileApp.inAppBrowser.executeScript({ code: "\
+                    var xhttp = new XMLHTtpRequest(); \
+                    xhttp.open('GET',logoutLink,true);\
+                    xhttp.send();\
+                    "
+                });
+
+                
+            } catch (error) {
+
+                console.log("failed to inject logout link");
+                
+            }finally{
+
+                MobileApp.inAppBrowser.close();
+            }
+
+            
         } else if (action === "geolocation") {
             navigator.geolocation.getCurrentPosition(function(position) { 
                 console.log(position) 
