@@ -690,25 +690,27 @@ var MobileApp = {
 
     cordovaAction: function(action, message, params) {
         console.log("action: " + params.data.action);
-        
+
         if (action === "close") {
             // call href="/jw/j_spring_security_logout" to logout
             // get method
             // use try-catch
             // use xhttp
 
-            var logoutLink ="/jw/j_spring_security_logout";
-
             try {
                 // cp from above and modify
-                MobileApp.inAppBrowser.executeScript({ code: "\
-                    var xhttp = new XMLHTtpRequest(); \
-                    xhttp.open('GET',logoutLink,true);\
-                    xhttp.send();\
+                MobileApp.inAppBrowser.executeScript({
+                    code: "\
+                        try { \
+                            var xhttp = new XMLHttpRequest(); \
+                            xhttp.open('GET', '/jw/j_spring_security_logout', true); \
+                            xhttp.send(); \
+                            console.log('Logout called successfully'); \
+                        } catch (e) { \
+                            console.log('Logout request failed: ', e); \
+                        } \
                     "
                 });
-
-                
             } catch (error) {
 
                 console.log("failed to inject logout link");
