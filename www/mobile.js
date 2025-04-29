@@ -474,24 +474,24 @@ var MobileApp = {
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=X,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "clearcache=yes,clearsessioncache=yes,hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=Xy,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
        
         // check the logout
-        MobileApp.logoutAlreadyTriggered = false;
+        // MobileApp.logoutAlreadyTriggered = false;
 
-        MobileApp.inAppBrowser.addEventListener("exit", function () {
-            if (!MobileApp.logoutAlreadyTriggered) {
-                MobileApp.logoutAlreadyTriggered = true;
+        // MobileApp.inAppBrowser.addEventListener("exit", function () {
+        //     if (!MobileApp.logoutAlreadyTriggered) {
+        //         MobileApp.logoutAlreadyTriggered = true;
         
-                try {
-                    var logoutUrl = "/jw/j_spring_security_logout";
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.open("GET", logoutUrl, true);
-                    xhttp.send();
-                } catch (e) {
-                }
-            }
-        });
+        //         try {
+        //             var logoutUrl = "/jw/j_spring_security_logout";
+        //             var xhttp = new XMLHttpRequest();
+        //             xhttp.open("GET", logoutUrl, true);
+        //             xhttp.send();
+        //         } catch (e) {
+        //         }
+        //     }
+        // });
         if (loginUrl) {   
             // perform login
             var callback = function () {
