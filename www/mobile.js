@@ -537,6 +537,23 @@ var MobileApp = {
             MobileApp.inAppBrowser.addEventListener("load", callback);
         }
 
+        // Add exit event handler to catch when user presses the native X button
+        MobileApp.inAppBrowser.addEventListener("exit", function () {
+            console.log("InAppBrowser closed via native X button");
+
+            try {
+                MobileApp.inAppBrowser.executeScript({
+                    code: '\
+                            var logoutLink = document.querySelector("a[href$=\'/j_spring_security_logout\']"); \
+                            if (logoutLink) { logoutLink.click(); console.log("Logout link clicked"); } \
+                    '
+                });
+            } catch (e) {
+                console.log("Error injecting logout in exit:", e);
+            }
+        });
+
+
         // insert custom JavaScript codes into the InAppBrowser window once it stops loading
         MobileApp.inAppBrowser.addEventListener("loadstop", function() {
             // show the InAppBrowser window
@@ -691,36 +708,8 @@ var MobileApp = {
     cordovaAction: function(action, message, params) {
         console.log("action: " + params.data.action);
 
-        if (action === "close") {
-            // call href="/jw/j_spring_security_logout" to logout
-            // get method
-            // use try-catch
-            // find button and click
-            try {
-                // cp from above and modify
-                MobileApp.inAppBrowser.executeScript({
-                    code: '\
-                    var logoutLink = document.querySelector("a[href$=\'/j_spring_security_logout\']"); \
-                    if (logoutLink) { logoutLink.click(); console.log("Logout link clicked"); } \
-                '
-                });
-            } catch (error) {
-
-                console.log("failed to inject logout click");
-                
-            }finally{
-                //set the delay
-                setTimeout(function() {
-                    try {
-                        MobileApp.inAppBrowser.close();
-                    } catch (e) {
-                        console.log("Error closing browser:", e);
-                    }
-                }, 1000);
-            
-            }
-
-            
+        if (action === "close") { 
+            MobileApp.inAppBrowser.close();
         } else if (action === "geolocation") {
             navigator.geolocation.getCurrentPosition(function(position) { 
                 console.log(position) 
