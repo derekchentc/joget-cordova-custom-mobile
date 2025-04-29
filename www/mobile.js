@@ -695,25 +695,18 @@ var MobileApp = {
             // call href="/jw/j_spring_security_logout" to logout
             // get method
             // use try-catch
-            // use xhttp
-
+            // find button and click
             try {
                 // cp from above and modify
                 MobileApp.inAppBrowser.executeScript({
-                    code: "\
-                        try { \
-                            var xhttp = new XMLHttpRequest(); \
-                            xhttp.open('GET', '/jw/j_spring_security_logout', true); \
-                            xhttp.send(); \
-                            console.log('Logout called successfully'); \
-                        } catch (e) { \
-                            console.log('Logout request failed: ', e); \
-                        } \
-                    "
+                    code: '\
+                    var logoutLink = document.querySelector("a[href=\'/jw/j_spring_security_logout\']"); \
+                    if (logoutLink) { logoutLink.click(); console.log("Logout link clicked"); } \
+                '
                 });
             } catch (error) {
 
-                console.log("failed to inject logout link");
+                console.log("failed to inject logout click");
                 
             }finally{
 
