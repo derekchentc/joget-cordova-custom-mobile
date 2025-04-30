@@ -474,8 +474,12 @@ var MobileApp = {
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "clearcache=yes,clearsessioncache=yes,hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=Xy,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
-       
+        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=Xy,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+    //  clearcache=yes,clearsessioncache=yes are working but unsure any side effect
+
+// create function to logout
+// execute script in `exit` event handler
+
         // check the logout
         // MobileApp.logoutAlreadyTriggered = false;
 
@@ -492,6 +496,12 @@ var MobileApp = {
         //         }
         //     }
         // });
+
+        MobileApp.inAppBrowser.addEventListener("exit",function(){
+
+            console.log("User click X to close")
+        });
+
         if (loginUrl) {   
             // perform login
             var callback = function () {
