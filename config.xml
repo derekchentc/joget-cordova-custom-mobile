@@ -5,7 +5,6 @@
     <author email="info@example.com" href="https://www.example.com">Example Inc</author>
     <access origin="*" />
     <allow-navigation href="*" />
-    <preference name="android-debuggable" value="true" />
     <preference name="Fullscreen" value="false" />
     <preference name="useBrowserHistory" value="true" />
     <preference name="exit-on-suspend" value="false" />
