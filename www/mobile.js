@@ -480,27 +480,10 @@ var MobileApp = {
 
 // create function to logout
 // execute script in `exit` event handler
-
-        // check the logout
-        // MobileApp.logoutAlreadyTriggered = false;
-
-        // MobileApp.inAppBrowser.addEventListener("exit", function () {
-        //     if (!MobileApp.logoutAlreadyTriggered) {
-        //         MobileApp.logoutAlreadyTriggered = true;
-        
-        //         try {
-        //             var logoutUrl = "/jw/j_spring_security_logout";
-        //             var xhttp = new XMLHttpRequest();
-        //             xhttp.open("GET", logoutUrl, true);
-        //             xhttp.send();
-        //         } catch (e) {
-        //         }
-        //     }
-        // });
-
         MobileApp.inAppBrowser.addEventListener("exit",function(){
 
-            console.log("User click X to close")
+            console.log("User click X to close");
+            MobileApp.logout();
         });
 
         if (loginUrl) {   
@@ -742,6 +725,25 @@ var MobileApp = {
             MobileApp.inAppBrowser.show();
         }
     },
+
+    logout: function () {
+        if (MobileApp.logoutAlreadyTriggered) {
+            console.log("Logout already triggered, skip.");
+            return;//exit frm function
+        }
+
+        MobileApp.logoutAlreadyTriggered = true;
+
+        try {
+            var logoutUrl = "/jw/j_spring_security_logout"; //url to logout
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", logoutUrl, true);
+            xhttp.send();
+            console.log("Logout clicked", logoutUrl);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 $(function() {
     MobileApp.init();
