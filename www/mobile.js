@@ -743,7 +743,7 @@ var MobileApp = {
         } catch (e) {
             console.log(e);
         }
-    }
+    },
 }
 $(function() {
     MobileApp.init();
