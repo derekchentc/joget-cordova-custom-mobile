@@ -485,7 +485,7 @@ var MobileApp = {
                    // Execute logout script inside InAppBrowser
 
         if (MobileApp.inAppBrowser && MobileApp.inAppBrowser.executeScript) {
-            console.log("home URL:" + homeUrl);
+            console.log("hardcoded url");
 
             // hardcoded url ... should be changed to find base url
             var script = `
