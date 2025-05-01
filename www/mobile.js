@@ -734,7 +734,12 @@ var MobileApp = {
         MobileApp.logoutAlreadyTriggered = true;
 
         try {
-            var logoutUrl = "/jw/j_spring_security_logout"; //url to logout
+
+            var baseUrl = MobileApp.getHomeUrl() || "";
+
+            console.log("baseUrl: " + baseUrl);
+            var logoutUrl = baseUrl + "/jw/j_spring_security_logout";
+
             var xhttp = new XMLHttpRequest();
             xhttp.open("GET", logoutUrl, true);
             xhttp.send();
