@@ -481,8 +481,21 @@ var MobileApp = {
 // execute script in `exit` event handler
         MobileApp.inAppBrowser.addEventListener("exit",function(){
 
-            console.log("User click X to close");
-            MobileApp.logout();
+        console.log("User click X to close");
+                   // Execute logout script inside InAppBrowser
+
+        if (MobileApp.inAppBrowser && MobileApp.inAppBrowser.executeScript) {
+            console.log("home URL:" + homeUrl);
+
+            // hardcoded url ... should be changed to find base url
+            var script = `
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", 'http://192.168.1.8:8080/jw/j_spring_security_logout', true);
+                xhttp.send();
+            `;
+            MobileApp.inAppBrowser.executeScript({ code: script });
+            console.log("Logout requested from inside InAppBrowser");
+        }
         });
 
         if (loginUrl) {   
