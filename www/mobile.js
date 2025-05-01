@@ -738,10 +738,12 @@ var MobileApp = {
             var baseUrl = MobileApp.getHomeUrl() || "";
 
             console.log("baseUrl: " + baseUrl);
-            var logoutUrl = baseUrl + "/jw/j_spring_security_logout";
+            // var logoutUrl = baseUrl + "/jw/j_spring_security_logout";
+            var logoutUrl = "http://192.168.1.8:8080/jw/j_spring_security_logout";
+            
 
             var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", logoutUrl, true);
+            xhttp.open("POST", logoutUrl, true);
             xhttp.send();
             console.log("Logout clicked", logoutUrl);
         } catch (e) {
