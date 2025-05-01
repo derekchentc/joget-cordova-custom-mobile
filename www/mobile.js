@@ -9,7 +9,6 @@ var MobileApp = {
         // device-specific initialization
         document.addEventListener("deviceready", MobileApp.initDevice, false);
         console.log("TESTING LOG");
-        Log.d("INIt: this is init");
         // reset login form validation 
         $(".is-invalid").removeClass("is-invalid");
 
