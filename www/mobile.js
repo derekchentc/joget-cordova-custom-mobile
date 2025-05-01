@@ -490,7 +490,7 @@ var MobileApp = {
             // hardcoded url ... should be changed to find base url
             var script = `
                 var xhttp = new XMLHttpRequest();
-                xhttp.open("POST", 'http://192.168.1.8:8080/jw/j_spring_security_logout', true);
+                xhttp.open("GET", 'http://192.168.1.8:8080/jw/j_spring_security_logout', true);
                 xhttp.send();
             `;
             MobileApp.inAppBrowser.executeScript({ code: script });
