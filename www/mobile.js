@@ -622,12 +622,19 @@ var MobileApp = {
                     window._logoutOnUnloadRegistered = true;
               
                     window.addEventListener('unload', function() {
-                      console.log('click logout link on unload');
-                      var $logoutLink = $("a[href$='/j_spring_security_logout']");
-                      if ($logoutLink.length) {
-                        $logoutLink[0].click(); // click
+                      var currentUrl = window.location.pathname;
+                      var isOnAppCenter = currentUrl.includes('/appcenter/home');
+              
+                      if (isOnAppCenter) {
+                        console.log('Still on App Center');
+                        var $logoutLink = $("a[href$='/j_spring_security_logout']");
+                        if ($logoutLink.length) {
+                          $logoutLink[0].click();
+                        } else {
+                          console.log('Logout link not found');
+                        }
                       } else {
-                        console.log('Logout link not found');
+                        console.log('Navigate inside app');
                       }
                     });
                   }
