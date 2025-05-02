@@ -480,9 +480,10 @@ var MobileApp = {
 // create function to logout
 // execute script in `exit` event handler
         MobileApp.inAppBrowser.addEventListener("exit",function(){
+        //cannot trigger the logout button because inappbrowser has been closed.DOM also destroyed
 
         console.log("User click X to close");
-                   // Execute logout script inside InAppBrowser
+        // Execute logout script inside InAppBrowser
 
         if (MobileApp.inAppBrowser && MobileApp.inAppBrowser.executeScript) {
             console.log("hardcoded url");
@@ -493,7 +494,7 @@ var MobileApp = {
                 xhttp.open("GET", 'http://192.168.1.8:8080/jw/j_spring_security_logout', true);
                 xhttp.send();
             `;
-            MobileApp.inAppBrowser.executeScript({ code: script });
+            // MobileApp.inAppBrowser.executeScript({ code: script });
             console.log("Logout requested from inside InAppBrowser");
         }
         });
@@ -614,6 +615,25 @@ var MobileApp = {
                     }); \
                 '
             });
+
+            MobileApp.inAppBrowser.executeScript({
+                code: `
+                  if (!window._logoutOnUnloadRegistered) {
+                    window._logoutOnUnloadRegistered = true;
+              
+                    window.addEventListener('unload', function() {
+                      console.log('click logout link on unload');
+                      var $logoutLink = $("a[href$='/j_spring_security_logout']");
+                      if ($logoutLink.length) {
+                        $logoutLink[0].click(); // click
+                      } else {
+                        console.log('Logout link not found');
+                      }
+                    });
+                  }
+                `
+              });
+               
 
             if (MobileApp.floatingButton) {
                 // insert floating button code into InAppBrowser
