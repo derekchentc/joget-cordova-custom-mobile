@@ -474,30 +474,8 @@ var MobileApp = {
         var inAppBrowser = (typeof cordova !== "undefined") ? cordova.InAppBrowser : window;
         var ios = typeof device !== "undefined" && device.platform === "iOS";
         var showLocationBar = (MobileApp.floatingButton && !ios) ? "no" : "yes"; // location bar should always be shown in iOS so that back navigation buttons are available e.g. when viewing images/documents
-        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=Xy,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
+        MobileApp.inAppBrowser = inAppBrowser.open(url, "_blank", "clearcache=yes,clearsessioncache=yes,hidden=yes,location=" + showLocationBar + ",toolbar=" + showLocationBar + ",toolbarcolor=#000000,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,closebuttoncaption=Xy,toolbartranslucent=no,toolbarposition=bottom,hideurlbar=yes,zoom=no");
     //  clearcache=yes,clearsessioncache=yes are working but unsure any side effect
-
-// create function to logout
-// execute script in `exit` event handler
-        MobileApp.inAppBrowser.addEventListener("exit",function(){
-        //cannot trigger the logout button because inappbrowser has been closed.DOM also destroyed
-
-        console.log("User click X to close");
-        // Execute logout script inside InAppBrowser
-
-        if (MobileApp.inAppBrowser && MobileApp.inAppBrowser.executeScript) {
-            console.log("hardcoded url");
-
-            // hardcoded url ... should be changed to find base url
-            var script = `
-                var xhttp = new XMLHttpRequest();
-                xhttp.open("GET", 'http://192.168.1.8:8080/jw/j_spring_security_logout', true);
-                xhttp.send();
-            `;
-            // MobileApp.inAppBrowser.executeScript({ code: script });
-            console.log("Logout requested from inside InAppBrowser");
-        }
-        });
 
         if (loginUrl) {   
             // perform login
@@ -614,33 +592,7 @@ var MobileApp = {
                         cordovaAction("close"); \
                     }); \
                 '
-            });
-
-            MobileApp.inAppBrowser.executeScript({
-                code: `
-                  if (!window._logoutOnUnloadRegistered) {
-                    window._logoutOnUnloadRegistered = true;
-              
-                    window.addEventListener('unload', function() {
-                      var currentUrl = window.location.pathname;
-                      var isOnAppCenter = currentUrl.includes('/appcenter/home');
-              
-                      if (isOnAppCenter) {
-                        console.log('Still on App Center');
-                        var $logoutLink = $("a[href$='/j_spring_security_logout']");
-                        if ($logoutLink.length) {
-                          $logoutLink[0].click();
-                        } else {
-                          console.log('Logout link not found');
-                        }
-                      } else {
-                        console.log('Navigate inside app');
-                      }
-                    });
-                  }
-                `
-              });
-               
+            });      
 
             if (MobileApp.floatingButton) {
                 // insert floating button code into InAppBrowser
@@ -765,31 +717,6 @@ var MobileApp = {
         }
     },
 
-    logout: function () {
-        if (MobileApp.logoutAlreadyTriggered) {
-            console.log("Logout already triggered, skip.");
-            return;//exit frm function
-        }
-
-        MobileApp.logoutAlreadyTriggered = true;
-
-        try {
-
-            var baseUrl = MobileApp.getHomeUrl() || "";
-
-            console.log("baseUrl: " + baseUrl);
-            // var logoutUrl = baseUrl + "/jw/j_spring_security_logout";
-            var logoutUrl = "http://192.168.1.8:8080/jw/j_spring_security_logout";
-            
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", logoutUrl, true);
-            xhttp.send();
-            console.log("Logout clicked", logoutUrl);
-        } catch (e) {
-            console.log(e);
-        }
-    },
 }
 $(function() {
     MobileApp.init();
