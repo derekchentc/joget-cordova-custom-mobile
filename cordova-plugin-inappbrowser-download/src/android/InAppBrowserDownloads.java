@@ -198,7 +198,7 @@ public class InAppBrowserDownloads implements DownloadListener {
                 if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
                     // FileUri - Convert it to contentUri.
                     File file = new File(attachmentUri.getPath());
-                    attachmentUri = FileProvider.getUriForFile(context, plugin.cordova.getActivity().getPackageName() + ".provider", file);
+                    attachmentUri = FileProvider.getUriForFile(context, plugin.cordova.getActivity().getPackageName() + ".cdv.core.file.provider", file);
                 }
 
                 Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);

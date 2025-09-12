@@ -964,7 +964,15 @@ public class InAppBrowser extends CordovaPlugin {
                             }
                             if(photoFile != null) {
                                 mCM = "file:" + photoFile.getAbsolutePath();
-                                Uri uri = FileProvider.getUriForFile(cordova.getActivity().getApplicationContext(), cordova.getActivity().getPackageName() + ".provider", photoFile);
+                                Uri uri = null;
+                                try {
+                                    // FileProvider already defined by Cordova (.cdv.core.file.provider)
+                                    uri = FileProvider.getUriForFile(cordova.getContext(), cordova.getActivity().getPackageName() + ".cdv.core.file.provider", photoFile);
+                                    Log.d(LOG_TAG, "FileProvider URI created successfully ");
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                    Log.d(LOG_TAG, "FileProvider failed",e);
+                                }
                                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                             } else {
                                 takePictureIntent = null;
@@ -1125,7 +1133,9 @@ public class InAppBrowser extends CordovaPlugin {
     private File createImageFile() throws IOException {
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "img_"+timeStamp+"_";
-        File storageDir = cordova.getActivity().getApplicationContext().getExternalFilesDir(null);
+
+        // use cache dir, follow with how cordova store image
+        File storageDir = cordova.getActivity().getCacheDir();
         return File.createTempFile(imageFileName,".jpg",storageDir);
     }
 
