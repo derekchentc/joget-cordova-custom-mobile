@@ -10,10 +10,16 @@ env:
 jobs:
   build-ios:
     name: Build iOS
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_16.1.0.app
+
+      - name: Check Xcode version
+        run: xcodebuild -version
 
       - name: Update ios-CFBundleVersion
         run: |
@@ -65,7 +71,7 @@ jobs:
         run: npm install -g cordova
 
       - name: Add Cordova iOS platform
-        run: cordova platform add ios@6.3.0
+        run: cordova platform add ios@7.1.0
 
       - name: Add custom cordova-plugin-inappbrowser
         run: cordova plugin add ./cordova-plugin-inappbrowser-download
@@ -109,11 +115,11 @@ jobs:
       - name: Build IPA
         run: |
           # build and export archive as ipa
-          cordova build ios --release --device --codeSignIdentity="Apple Distribution" --developmentTeam="$TEAM_ID" --packageType="app-store" --provisioningProfile="$PROVISIONING_PROFILE" --buildFlag="PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE" --buildFlag="CODE_SIGN_STYLE=Manual"
+          cordova build ios --release --device --codeSignIdentity="Apple Distribution" --developmentTeam="$TEAM_ID" --packageType="app-store-connect" --provisioningProfile="$PROVISIONING_PROFILE" --buildFlag="PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE" --buildFlag="CODE_SIGN_STYLE=Manual"
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-app-release
-          path: platforms/ios/build/device/${{ env.IPA_FILE }}
+          path: platforms/ios/build/Release-iphoneos/${{ env.IPA_FILE }}
 
